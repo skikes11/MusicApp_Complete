@@ -39,7 +39,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PlayListModel playlist = mangplaylist.get(position);
         holder.txttenplaylist.setText(playlist.getTenPlayList());
         Picasso.get().load(playlist.getHinhPlayList()).into(holder.imgplaylist);
@@ -47,7 +47,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DanhSachBaiHatActivity.class);
-                intent.putExtra("intentplaylist", mangplaylist.get(position));
+                intent.putExtra("intentplaylist", mangplaylist.get(holder.getBindingAdapterPosition()));
                 context.startActivity(intent);
             }
         });

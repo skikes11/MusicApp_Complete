@@ -17,6 +17,7 @@ import com.android.appmusic11.Model.BaiHatModel;
 import com.android.appmusic11.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class DanhSachBaiHatAdapter extends RecyclerView.Adapter<DanhSachBaiHatAdapter.ViewHolder> {
@@ -64,7 +65,6 @@ public class DanhSachBaiHatAdapter extends RecyclerView.Adapter<DanhSachBaiHatAd
                     Intent intent = new Intent(context, PlayNhacActivity.class);
                     intent.putExtra("cakhuc", arrayBaiHat.get(getBindingAdapterPosition()));
                     context.startActivity(intent);
-
                 }
             });
         }

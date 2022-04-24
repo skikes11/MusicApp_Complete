@@ -153,7 +153,7 @@ public class dsbhthuvienplaylistAdapter extends RecyclerView.Adapter<dsbhthuvien
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, PlayNhacActivity.class);
-                    intent.putExtra("cakhucthuvien", mangbaihatthuvienplaylist.get(getAdapterPosition()));
+//                    intent.putExtra("cakhucthuvien", mangbaihatthuvienplaylist.get(getAdapterPosition()));
                     context.startActivity(intent);
 
                 }

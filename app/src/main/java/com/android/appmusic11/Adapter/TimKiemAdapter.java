@@ -2,6 +2,7 @@ package com.android.appmusic11.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,7 @@ public class TimKiemAdapter extends RecyclerView.Adapter<TimKiemAdapter.ViewHold
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, PlayNhacActivity.class);
-                    intent.putExtra("cakhuc", arrayBaiHat.get(i));
+                    intent.putExtra("cakhuc", (Parcelable) arrayBaiHat.get(i));
                     context.startActivity(intent);
                 }
             });

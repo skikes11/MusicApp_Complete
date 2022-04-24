@@ -56,6 +56,6 @@ public class Fragment_NgheSi extends Fragment {
                 linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                 recyclerViewNgheSi.setLayoutManager(linearLayoutManager);
                 recyclerViewNgheSi.setAdapter(ngheSiAdapter);
+                dataNgheSi.close();
     }
-
 }

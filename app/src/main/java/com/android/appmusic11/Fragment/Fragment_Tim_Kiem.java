@@ -3,6 +3,7 @@ package com.android.appmusic11.Fragment;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -76,8 +77,9 @@ public class Fragment_Tim_Kiem extends Fragment {
     }
 
     private void TimKiemBaiHat(String query){
+        Log.d("ManhCuong","Query:"+query);
        arrayBaiHat = new ArrayList<>();
-        Cursor dataBaiHat = TrangChuActivity.databaseHelper.getData("SELECT * FROM BaiHat WHERE TenBaiHat = '"+query+"' ");
+        Cursor dataBaiHat = TrangChuActivity.databaseHelper.getData("SELECT * FROM BaiHat WHERE TenBaiHat LIKE'%"+query+"%' ");
         arrayBaiHat.clear();
            while (dataBaiHat.moveToNext()) {
                int MaBaiHat = dataBaiHat.getInt(0);

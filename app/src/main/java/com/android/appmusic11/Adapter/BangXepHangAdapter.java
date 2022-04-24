@@ -46,7 +46,7 @@ public class BangXepHangAdapter extends RecyclerView.Adapter<BangXepHangAdapter.
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DanhSachBaiHatActivity.class);
-                intent.putExtra("intentbangxephang",arrayBangXepHang.get(position));
+                intent.putExtra("intentbangxephang",arrayBangXepHang.get(holder.getBindingAdapterPosition()));
                 context.startActivity(intent);
             }
         });

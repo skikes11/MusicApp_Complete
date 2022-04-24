@@ -3,6 +3,7 @@ package com.android.appmusic11.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class NgheSiAdapter extends RecyclerView.Adapter<NgheSiAdapter.ViewHolder
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DanhSachBaiHatActivity.class);
-                intent.putExtra("intentnghesi",arrayNgheSi.get(position));
+                intent.putExtra("intentnghesi",arrayNgheSi.get(holder.getBindingAdapterPosition()));
                 context.startActivity(intent);
             }
         });

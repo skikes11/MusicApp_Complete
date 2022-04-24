@@ -40,12 +40,15 @@ public class ThinhHanhAdapter extends RecyclerView.Adapter<ThinhHanhAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ThinhHanhModel thinhHanh = arrayThinhHanh.get(position);
         holder.txttenthinhhanh.setText(thinhHanh.getTenThinhHanh());
-        Picasso.get(/*context*/).load(thinhHanh.getHinhThinhHanh()).into(holder.imgpthinhhanh);
+        String url = thinhHanh.getHinhThinhHanh();
+        Picasso.get()
+                .load(url)
+                .into(holder.imgpthinhhanh);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DanhSachBaiHatActivity.class);
-                intent.putExtra("intentthinhhanh",arrayThinhHanh.get(position));
+                intent.putExtra("intentthinhhanh",arrayThinhHanh.get(holder.getBindingAdapterPosition()));
                 context.startActivity(intent);
             }
         });

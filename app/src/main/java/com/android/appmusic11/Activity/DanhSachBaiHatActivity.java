@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.appmusic11.Adapter.DanhSachBaiHatAdapter;
 import com.android.appmusic11.Adapter.dsbhthuvienplaylistAdapter;
@@ -20,6 +21,7 @@ import com.android.appmusic11.Model.BaiHatModel;
 import com.android.appmusic11.Model.BangXepHangModel;
 import com.android.appmusic11.Model.ChuDeModel;
 import com.android.appmusic11.Model.NgheSiModel;
+import com.android.appmusic11.Model.PlayListModel;
 import com.android.appmusic11.Model.ThinhHanhModel;
 import com.android.appmusic11.Model.ThuVienPlayListModel;
 import com.android.appmusic11.R;
@@ -34,6 +36,7 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
     RecyclerView recyclerViewdanhsachbaihat;
     FloatingActionButton floatingActionButton;
     TextView txtcollapsing;
+    PlayListModel playlist = null;
     NgheSiModel ngheSi = null;
     ThinhHanhModel thinhHanh=null;
     ChuDeModel chuDe = null;
@@ -61,21 +64,27 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
             txtcollapsing.setText(ngheSi.getTenNgheSi());
             getSupportActionBar().setTitle(ngheSi.getTenNgheSi());
         }
+        if (playlist != null && !playlist.equals("")){
+            setValueInView(playlist.getHinhPlayList());
+            GetDataPlaylist(playlist.getMaPlayList());
+            txtcollapsing.setText(playlist.getTenPlayList());
+            getSupportActionBar().setTitle(playlist.getTenPlayList());
+        }
         if (thinhHanh != null && !thinhHanh.equals("")){
             setValueInView(thinhHanh.getHinhThinhHanh());
-//            GetDataPhoBien(phoBien.getMaPhoBien());
-            txtcollapsing.setText(thinhHanh.getHinhThinhHanh());
+            GetDataThinhHanh(thinhHanh.getMaThinhHanh());
+            txtcollapsing.setText(thinhHanh.getTenThinhHanh());
             getSupportActionBar().setTitle(thinhHanh.getTenThinhHanh());
         }
         if (chuDe != null && !chuDe.equals("")){
             setValueInView(chuDe.getHinhChuDe());
-//            GetDataChuDe(chuDe.getMaChuDe());
+            GetDataChuDe(chuDe.getMaChuDe());
             txtcollapsing.setText(chuDe.getTenChuDe());
             getSupportActionBar().setTitle(chuDe.getTenChuDe());
         }
         if (bangXepHang != null && !bangXepHang.equals("")){
             setValueInView(bangXepHang.getHinhBangXepHang());
-//            GetDataBangXepHang(bangXepHang.getMaBangXepHang());
+         GetDataBangXepHang(bangXepHang.getMaBangXepHang());
             txtcollapsing.setText(bangXepHang.getTenBangXepHang());
             getSupportActionBar().setTitle(bangXepHang.getTenBangXepHang());
         }
@@ -86,7 +95,7 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(thuVienPlayList.getTenThuVienPlayList());
         }
 
-//        floatActionButtonClick();
+     floatActionButtonClick();
         btnThemnhac.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,64 +126,61 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
     private void setValueInView(String hinh) {
         Picasso.get().load(hinh).into(imgdanhsachcakhuc);
     }
-//    private void GetDataPlaylist(String id) {
-//        Dataservice dataservice = APIService.getService();
-//        Call<List<BaiHatModel>> callback = dataservice.GetDanhsachbaihatplaylist(id);
-//        callback.enqueue(new Callback<List<BaiHatModel>>() {
-//            @Override
-//            public void onResponse(Call<List<BaiHatModel>> call, Response<List<BaiHatModel>> response) {
-//                mangbaihat = (ArrayList<BaiHatModel>) response.body();
-//                danhsachbaihatAdapter = new DanhsachbaihatAdapter(DanhsachbaihatActivity.this, mangbaihat);
-//                recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhsachbaihatActivity.this));
-//                recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<BaiHatModel>> call, Throwable t) {
-//
-//            }
-//        });
-//    }
-//    private void GetDataBangXepHang(String id) {
-//        Dataservice dataservice = APIService.getService();
-//        Call<List<BaiHatModel>> callback = dataservice.GetDanhsachbaihatbangxephang(id);
-//        callback.enqueue(new Callback<List<BaiHatModel>>() {
-//            @Override
-//            public void onResponse(Call<List<BaiHatModel>> call, Response<List<BaiHatModel>> response) {
-//                mangbaihat = (ArrayList<BaiHatModel>) response.body();
-//                danhsachbaihatAdapter = new DanhsachbaihatAdapter(DanhsachbaihatActivity.this, mangbaihat);
-//                recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhsachbaihatActivity.this));
-//                recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<BaiHatModel>> call, Throwable t) {
-//
-//            }
-//        });
-//    }
-//    private void GetDataChuDe(String id) {
-//        Dataservice dataservice = APIService.getService();
-//        Call<List<BaiHatModel>> callback = dataservice.GetDanhsachbaihatchude(id);
-//        callback.enqueue(new Callback<List<BaiHatModel>>() {
-//            @Override
-//            public void onResponse(Call<List<BaiHatModel>> call, Response<List<BaiHatModel>> response) {
-//                mangbaihat = (ArrayList<BaiHatModel>) response.body();
-//                danhsachbaihatAdapter = new DanhsachbaihatAdapter(DanhsachbaihatActivity.this, mangbaihat);
-//                recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhsachbaihatActivity.this));
-//                recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<BaiHatModel>> call, Throwable t) {
-//
-//            }
-//        });
-//    }
+    private void GetDataPlaylist(String id) {
+        mangbaihat = new ArrayList<>();
+        mangbaihat.clear();
+        Cursor dataBaiHat = TrangChuActivity.databaseHelper.getData("SELECT MaBaiHat, TenBaiHat, HinhBaiHat, TenCaSi, LinkBaiHat FROM BaiHat WHERE BaiHat.MaIdPlayList = '"+id+"'");
+        while (dataBaiHat.moveToNext()) {
+            int MaBaiHat = dataBaiHat.getInt(0);
+            String TenBaiHat = dataBaiHat.getString(1);
+            String HinhBaiHat = dataBaiHat.getString(2);
+            String TenNgheSi = dataBaiHat.getString(3);
+            String LinkBaiHat = dataBaiHat.getString(4);
+            mangbaihat.add(new BaiHatModel(MaBaiHat, TenBaiHat, HinhBaiHat, TenNgheSi, LinkBaiHat));
+        }
+        danhsachbaihatAdapter = new DanhSachBaiHatAdapter(DanhSachBaiHatActivity.this, mangbaihat);
+        recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhSachBaiHatActivity.this));
+        recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
+        dataBaiHat.close();
+    }
+    private void GetDataBangXepHang(String id) {
+        mangbaihat = new ArrayList<>();
+        mangbaihat.clear();
+        Cursor dataBaiHat = TrangChuActivity.databaseHelper.getData("SELECT MaBaiHat, TenBaiHat, HinhBaiHat, TenCaSi, LinkBaiHat FROM BaiHat WHERE BaiHat.MaBangXepHang = '"+id+"'");
+        while (dataBaiHat.moveToNext()) {
+            int MaBaiHat = dataBaiHat.getInt(0);
+            String TenBaiHat = dataBaiHat.getString(1);
+            String HinhBaiHat = dataBaiHat.getString(2);
+            String TenNgheSi = dataBaiHat.getString(3);
+            String LinkBaiHat = dataBaiHat.getString(4);
+            mangbaihat.add(new BaiHatModel(MaBaiHat, TenBaiHat, HinhBaiHat, TenNgheSi, LinkBaiHat));
+        }
+        danhsachbaihatAdapter = new DanhSachBaiHatAdapter(DanhSachBaiHatActivity.this, mangbaihat);
+        recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhSachBaiHatActivity.this));
+        recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
+        dataBaiHat.close();
+    }
+    private void GetDataChuDe(String id) {
+        mangbaihat = new ArrayList<>();
+        mangbaihat.clear();
+        Cursor dataBaiHat = TrangChuActivity.databaseHelper.getData("SELECT MaBaiHat, TenBaiHat, HinhBaiHat, TenCaSi, LinkBaiHat FROM BaiHat WHERE BaiHat.MaChuDe = '"+id+"'");
+        while (dataBaiHat.moveToNext()) {
+            int MaBaiHat = dataBaiHat.getInt(0);
+            String TenBaiHat = dataBaiHat.getString(1);
+            String HinhBaiHat = dataBaiHat.getString(2);
+            String TenNgheSi = dataBaiHat.getString(3);
+            String LinkBaiHat = dataBaiHat.getString(4);
+            mangbaihat.add(new BaiHatModel(MaBaiHat, TenBaiHat, HinhBaiHat, TenNgheSi, LinkBaiHat));
+        }
+        danhsachbaihatAdapter = new DanhSachBaiHatAdapter(DanhSachBaiHatActivity.this, mangbaihat);
+        recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhSachBaiHatActivity.this));
+        recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
+        dataBaiHat.close();
+    }
     private void GetDataNgheSi(String id) {
         mangbaihat = new ArrayList<>();
         mangbaihat.clear();
-        Cursor dataBaiHat = TrangChuActivity.databaseHelper.getData("SELECT MaBaiHat, TenBaiHat, HinhBaiHat, TenNgheSi, LinkBaiHat FROM BaiHat, NgheSi WHERE BaiHat.MaNgheSi = NgheSi.MaNgheSi");
+        Cursor dataBaiHat = TrangChuActivity.databaseHelper.getData("SELECT MaBaiHat, TenBaiHat, HinhBaiHat, TenCaSi, LinkBaiHat FROM BaiHat WHERE BaiHat.MaNgheSi = '"+id+"'");
         while (dataBaiHat.moveToNext()) {
             int MaBaiHat = dataBaiHat.getInt(0);
             String TenBaiHat = dataBaiHat.getString(1);
@@ -186,7 +192,8 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
                 danhsachbaihatAdapter = new DanhSachBaiHatAdapter(DanhSachBaiHatActivity.this, mangbaihat);
                 recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhSachBaiHatActivity.this));
                 recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
-            }
+                dataBaiHat.close();
+    }
 
 //    private void GetDataPhoBien(String id) {
 //        Dataservice dataservice = APIService.getService();
@@ -206,24 +213,23 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
-//    private void GetDataThinhHanh(String id) {
-//        Dataservice dataservice = APIService.getService();
-//        Call<List<BaiHatModel>> callback = dataservice.GetDanhsachbaihatthinhhanh(id);
-//        callback.enqueue(new Callback<List<BaiHatModel>>() {
-//            @Override
-//            public void onResponse(Call<List<BaiHatModel>> call, Response<List<BaiHatModel>> response) {
-//                mangbaihat = (ArrayList<BaiHatModel>) response.body();
-//                danhsachbaihatAdapter = new DanhsachbaihatAdapter(DanhsachbaihatActivity.this, mangbaihat);
-//                recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhsachbaihatActivity.this));
-//                recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<BaiHatModel>> call, Throwable t) {
-//
-//            }
-//        });
-//    }
+    private void GetDataThinhHanh(String id) {
+        mangbaihat = new ArrayList<>();
+        mangbaihat.clear();
+        Cursor dataBaiHat = TrangChuActivity.databaseHelper.getData("SELECT MaBaiHat, TenBaiHat, HinhBaiHat, TenCaSi, LinkBaiHat FROM BaiHat WHERE BaiHat.MaThinhHanh = '"+id+"'");
+        while (dataBaiHat.moveToNext()) {
+            int MaBaiHat = dataBaiHat.getInt(0);
+            String TenBaiHat = dataBaiHat.getString(1);
+            String HinhBaiHat = dataBaiHat.getString(2);
+            String TenNgheSi = dataBaiHat.getString(3);
+            String LinkBaiHat = dataBaiHat.getString(4);
+            mangbaihat.add(new BaiHatModel(MaBaiHat, TenBaiHat, HinhBaiHat, TenNgheSi, LinkBaiHat));
+        }
+        danhsachbaihatAdapter = new DanhSachBaiHatAdapter(DanhSachBaiHatActivity.this, mangbaihat);
+                recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhSachBaiHatActivity.this));
+                recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
+                dataBaiHat.close();
+            }
 //    private void GetDataThuVienPlayList(String id) {
 //        Dataservice dataservice = APIService.getService();
 //        Call<List<BaiHatThuVienPlayListModel>> callback = dataservice.GetDanhsachbaihatthuvienplaylist(id);
@@ -269,8 +275,12 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
             if (intent.hasExtra("intentnghesi")){
                 ngheSi = (NgheSiModel) intent.getSerializableExtra("intentnghesi");
             }else
-            if (intent.hasExtra("intentphobien")){
-                thinhHanh = (ThinhHanhModel) intent.getSerializableExtra("intentphobien");
+            if (intent.hasExtra("intentplaylist")){
+                playlist = (PlayListModel) intent.getSerializableExtra("intentplaylist");
+            }
+            else
+            if (intent.hasExtra("intentthinhhanh")){
+                thinhHanh = (ThinhHanhModel) intent.getSerializableExtra("intentthinhhanh");
             }else
             if (intent.hasExtra("intentchude")){
                 chuDe = (ChuDeModel) intent.getSerializableExtra("intentchude");
@@ -285,20 +295,21 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
             }
         }
     }
-//    private void floatActionButtonClick(){
-//        floatingActionButton.setEnabled(true);
-//        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(DanhSachBaiHatActivity.this, PlayNhacActivity.class);
-//                if (mangbaihat!=null){
-//                    if (mangbaihat.size() > 0){
-//                        intent.putExtra("cacbaihat", mangbaihat);
-//                        startActivity(intent);
-//                    }else {
-//                        Toast.makeText(DanhSachBaiHatActivity.this, "Danh sách không có bài hát nào cả :(", Toast.LENGTH_SHORT).show();
-//                    }
-//                }else{
+    private void floatActionButtonClick(){
+        floatingActionButton.setEnabled(true);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DanhSachBaiHatActivity.this, PlayNhacActivity.class);
+                if (mangbaihat!=null){
+                    if (mangbaihat.size() > 0){
+                        intent.putExtra("cacbaihat", mangbaihat);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(DanhSachBaiHatActivity.this, "Danh sách không có bài hát nào cả :(", Toast.LENGTH_SHORT).show();
+                    }
+                }
+//                else{
 //                    if (mangbaihatthuvienplaylist != null){
 //                        if (mangbaihatthuvienplaylist.size() > 0){
 //                            intent.putExtra("cacbaihatthuvien", mangbaihatthuvienplaylist);
@@ -308,7 +319,7 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
 //                        }
 //                    }
 //                }
-//            }
-//        });
-//    }
+            }
+        });
+    }
 }

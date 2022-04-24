@@ -1,5 +1,6 @@
 package com.android.appmusic11.Fragment;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.android.appmusic11.Activity.TrangChuActivity;
 import com.android.appmusic11.Adapter.ChuDeAdapter;
+import com.android.appmusic11.Adapter.NgheSiAdapter;
 import com.android.appmusic11.Model.ChuDeModel;
+import com.android.appmusic11.Model.NgheSiModel;
 import com.android.appmusic11.R;
 
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ public class Fragment_ChuDe extends Fragment {
     ChuDeAdapter chuDeAdapter;
     RecyclerView recyclerViewChuDe;
     TextView tenChuDe;
+    ArrayList<ChuDeModel> arrayChuDe;
 
     @Nullable
     @Override
@@ -35,30 +40,25 @@ public class Fragment_ChuDe extends Fragment {
         view = inflater.inflate(R.layout.fragment_chude, container, false);
         recyclerViewChuDe = view.findViewById(R.id.recyclerviewchude);
         tenChuDe = view.findViewById(R.id.txtchude);
-//        GetData();
+        GetData();
         return view;
     }
 
-//    private void GetData() {
-//        Dataservice dataservice = APIService.getService();
-//        Call<List<ChuDeModel>> callback = dataservice.GetChuDeCurrent();
-//        callback.enqueue(new Callback<List<ChuDeModel>>() {
-//            @Override
-//            public void onResponse(Call<List<ChuDeModel>> call, Response<List<ChuDeModel>> response) {
-//                ArrayList<ChuDeModel> mangchude = (ArrayList<ChuDeModel>) response.body();
-//                chuDeAdapter = new ChuDeAdapter(getActivity(), mangchude);
-//
-//                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-//                linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-//                recyclerViewChuDe.setLayoutManager(linearLayoutManager);
-//                recyclerViewChuDe.setAdapter(chuDeAdapter);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<ChuDeModel>> call, Throwable t) {
-//
-//            }
-//        });
-//    }
-
-}
+    private void GetData() {
+        arrayChuDe = new ArrayList<>();
+        Cursor dataChuDe = TrangChuActivity.databaseHelper.getData("SELECT * FROM ChuDe");
+        arrayChuDe.clear();
+        while (dataChuDe.moveToNext()) {
+            String MaChuDe =dataChuDe.getString(0);
+            String TenChuDe = dataChuDe.getString(1);
+            String HinhChuDe = dataChuDe.getString(2);
+            arrayChuDe.add(new ChuDeModel(MaChuDe,TenChuDe,HinhChuDe));
+        }
+        chuDeAdapter = new ChuDeAdapter(getActivity(),arrayChuDe);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                recyclerViewChuDe.setLayoutManager(linearLayoutManager);
+                recyclerViewChuDe.setAdapter(chuDeAdapter);
+                dataChuDe.close();
+            }
+    }

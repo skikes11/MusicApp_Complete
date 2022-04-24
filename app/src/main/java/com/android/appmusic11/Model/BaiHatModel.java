@@ -1,8 +1,11 @@
 package com.android.appmusic11.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
-public class BaiHatModel implements Serializable {
+public class BaiHatModel implements Parcelable {
     private int MaBaiHat;
     private String TenBaiHat;
     private String HinhBaiHat;
@@ -16,6 +19,26 @@ public class BaiHatModel implements Serializable {
         TenCaSi = tenCaSi;
         LinkBaiHat = linkBaiHat;
     }
+
+    protected BaiHatModel(Parcel in) {
+        MaBaiHat = in.readInt();
+        TenBaiHat = in.readString();
+        HinhBaiHat = in.readString();
+        TenCaSi = in.readString();
+        LinkBaiHat = in.readString();
+    }
+
+    public static final Creator<BaiHatModel> CREATOR = new Creator<BaiHatModel>() {
+        @Override
+        public BaiHatModel createFromParcel(Parcel in) {
+            return new BaiHatModel(in);
+        }
+
+        @Override
+        public BaiHatModel[] newArray(int size) {
+            return new BaiHatModel[size];
+        }
+    };
 
     public int getMaBaiHat() {
         return MaBaiHat;
@@ -55,5 +78,19 @@ public class BaiHatModel implements Serializable {
 
     public void setLinkBaiHat(String linkBaiHat) {
         LinkBaiHat = linkBaiHat;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(MaBaiHat);
+        parcel.writeString(TenBaiHat);
+        parcel.writeString(HinhBaiHat);
+        parcel.writeString(TenCaSi);
+        parcel.writeString(LinkBaiHat);
     }
 }
