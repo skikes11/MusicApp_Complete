@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent = new Intent(MainActivity.this,TrangChuActivity.class);
                             startActivity(intent);
                         }
-                    },5000);
+                    },3500);
                 }
             }, 2000);
 

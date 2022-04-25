@@ -46,7 +46,7 @@ public class ChuDeAdapter extends RecyclerView.Adapter<ChuDeAdapter.ViewHolder> 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DanhSachBaiHatActivity.class);
-                intent.putExtra("intentchude", arrayChuDe.get(position));
+                intent.putExtra("intentchude", arrayChuDe.get(holder.getBindingAdapterPosition()));
                 context.startActivity(intent);
             }
         });

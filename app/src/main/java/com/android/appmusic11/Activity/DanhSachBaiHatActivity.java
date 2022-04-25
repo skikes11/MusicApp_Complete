@@ -194,25 +194,6 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
                 recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
                 dataBaiHat.close();
     }
-
-//    private void GetDataPhoBien(String id) {
-//        Dataservice dataservice = APIService.getService();
-//        Call<List<BaiHatModel>> callback = dataservice.GetDanhsachbaihatphobien(id);
-//        callback.enqueue(new Callback<List<BaiHatModel>>() {
-//            @Override
-//            public void onResponse(Call<List<BaiHatModel>> call, Response<List<BaiHatModel>> response) {
-//                mangbaihat = (ArrayList<BaiHatModel>) response.body();
-//                danhsachbaihatAdapter = new DanhsachbaihatAdapter(DanhsachbaihatActivity.this, mangbaihat);
-//                recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhsachbaihatActivity.this));
-//                recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<BaiHatModel>> call, Throwable t) {
-//
-//            }
-//        });
-//    }
     private void GetDataThinhHanh(String id) {
         mangbaihat = new ArrayList<>();
         mangbaihat.clear();

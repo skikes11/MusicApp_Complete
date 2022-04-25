@@ -22,7 +22,6 @@ import java.util.ArrayList;
 public class TimKiemAdapter extends RecyclerView.Adapter<TimKiemAdapter.ViewHolder> {
     Context context;
     ArrayList<BaiHatModel> arrayBaiHat;
-    int i;
 
     public TimKiemAdapter(Context context, ArrayList<BaiHatModel> arrayBaiHat) {
         this.context = context;
@@ -43,7 +42,6 @@ public class TimKiemAdapter extends RecyclerView.Adapter<TimKiemAdapter.ViewHold
         holder.txttentimkiem.setText(baiHat.getTenBaiHat());
         holder.txtcasitimkiem.setText(baiHat.getTenCaSi());
         Picasso.get().load(baiHat.getHinhBaiHat()).into(holder.imganhtimkiem);
-        i=position;
     }
 
     @Override
@@ -66,7 +64,7 @@ public class TimKiemAdapter extends RecyclerView.Adapter<TimKiemAdapter.ViewHold
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, PlayNhacActivity.class);
-                    intent.putExtra("cakhuc", (Parcelable) arrayBaiHat.get(i));
+                    intent.putExtra("cakhuc", (Parcelable) arrayBaiHat.get(getBindingAdapterPosition()));
                     context.startActivity(intent);
                 }
             });

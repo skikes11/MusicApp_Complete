@@ -79,7 +79,7 @@ public class Fragment_Tim_Kiem extends Fragment {
     private void TimKiemBaiHat(String query){
         Log.d("ManhCuong","Query:"+query);
        arrayBaiHat = new ArrayList<>();
-        Cursor dataBaiHat = TrangChuActivity.databaseHelper.getData("SELECT * FROM BaiHat WHERE TenBaiHat LIKE'%"+query+"%' ");
+        Cursor dataBaiHat = TrangChuActivity.databaseHelper.getData("SELECT * FROM BaiHat WHERE TenBaiHat LIKE'%"+query+"%' OR TenCaSi LIKE'%"+query+"%'");
         arrayBaiHat.clear();
            while (dataBaiHat.moveToNext()) {
                int MaBaiHat = dataBaiHat.getInt(0);

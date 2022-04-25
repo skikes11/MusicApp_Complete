@@ -24,7 +24,7 @@
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:collapseIcon="?attr/actionModeCloseDrawable"
-            app:title="Nghệ sĩ, bài hát, hoặc podcast"
+            app:title="Nghệ sĩ, bài hát"
             app:titleTextColor="#FFF" />
     </com.google.android.material.appbar.AppBarLayout>
 
