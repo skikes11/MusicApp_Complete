@@ -21,6 +21,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
 import com.android.appmusic11.Model.BaiHatModel;
+import com.android.appmusic11.Model.BaiHatThuVienPlayListModel;
 import com.android.appmusic11.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -40,8 +41,8 @@ public class ForegroundServiceControl extends Service {
     private MediaPlayer mediaPlayer;
     private boolean isPlaying, isRepeat, isRandom;
     private String urlImage;
+    private ArrayList<BaiHatThuVienPlayListModel> mangbaihetthuvienplaylist = new ArrayList<>();
     private ArrayList<BaiHatModel> mangbaihat = new ArrayList<>();
-//    private ArrayList<BaiHatThuVienPlayListModel> mangbaihetthuvienplaylist = new ArrayList<>();
     private int positionPlayer = 0, duration = 0, seekToTime = 0, curentime = 0;
     @Override
     public void onCreate() {
@@ -59,10 +60,11 @@ public class ForegroundServiceControl extends Service {
                     clearArray();
                     mangbaihat = intent.getParcelableArrayListExtra("obj_song_baihat");
                 }
-//                else if (intent.hasExtra("obj_song_thuvien")){
-//                    clearArray();
-//                    mangbaihetthuvienplaylist = intent.getParcelableArrayListExtra("obj_song_thuvien");
-//                }
+                else if (intent.hasExtra("obj_song_thuvien")){
+                    clearArray();
+                    mangbaihetthuvienplaylist = intent.getParcelableArrayListExtra("obj_song_thuvien");
+                    Log.d("ManhCuong","Bài hát thư viện"+mangbaihetthuvienplaylist.size());
+                }
             }
         assert intent != null;
         if (!intent.hasExtra("action_music_service")){
@@ -78,7 +80,7 @@ public class ForegroundServiceControl extends Service {
     private void clearArray() {
         positionPlayer = 0;
         mangbaihat.clear();
-//        mangbaihetthuvienplaylist.clear();
+        mangbaihetthuvienplaylist.clear();
 
     }
     private void handleActionMusic(int action){
@@ -87,35 +89,35 @@ public class ForegroundServiceControl extends Service {
                 if (mangbaihat != null && mangbaihat.size() > 0){
                     pauseMusic(mangbaihat.get(positionPlayer).getTenBaiHat(), mangbaihat.get(positionPlayer).getTenCaSi());
                 }
-//                else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
-//                    pauseMusic(mangbaihetthuvienplaylist.get(positionPlayer).getTenBaiHat(), mangbaihetthuvienplaylist.get(positionPlayer).getTenCaSi());
-//                }
+                else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
+                    pauseMusic(mangbaihetthuvienplaylist.get(positionPlayer).getTenBaiHat(), mangbaihetthuvienplaylist.get(positionPlayer).getTenCaSi());
+                }
                 break;
             case ACTION_RESUME:
                 if (mangbaihat != null && mangbaihat.size() > 0){
                     resumeMusic(mangbaihat.get(positionPlayer).getTenBaiHat(), mangbaihat.get(positionPlayer).getTenCaSi());
                 }
-//                else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
-//                    resumeMusic(mangbaihetthuvienplaylist.get(positionPlayer).getTenBaiHat(), mangbaihetthuvienplaylist.get(positionPlayer).getTenCaSi());
-//                }
+                else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
+                    resumeMusic(mangbaihetthuvienplaylist.get(positionPlayer).getTenBaiHat(), mangbaihetthuvienplaylist.get(positionPlayer).getTenCaSi());
+                }
 
                 break;
             case ACTION_NEXT:
                 if (mangbaihat != null && mangbaihat.size() > 0){
                     nextMusic(mangbaihat.size());
                 }
-//                else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
-//                    nextMusic(mangbaihetthuvienplaylist.size());
-//                }
+                else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
+                    nextMusic(mangbaihetthuvienplaylist.size());
+                }
                 CompleteAndStart();
                 break;
             case ACTION_PREVIOUS:
                 if (mangbaihat != null && mangbaihat.size() > 0){
                     previousMusic(mangbaihat.size());
                 }
-//                else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
-//                    previousMusic(mangbaihetthuvienplaylist.size());
-//                }
+                else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
+                    previousMusic(mangbaihetthuvienplaylist.size());
+                }
                 CompleteAndStart();
                 break;
             case ACTION_DURATION:
@@ -181,21 +183,19 @@ public class ForegroundServiceControl extends Service {
             startMusic(mangbaihat.get(positionPlayer).getLinkBaiHat());
             urlImage = mangbaihat.get(positionPlayer).getHinhBaiHat();
         }
-//        else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
-//            startMusic(mangbaihetthuvienplaylist.get(positionPlayer).getLinkBaiHat());
-//            urlImage = mangbaihetthuvienplaylist.get(positionPlayer).getHinhBaiHat();
-//            sendNotificationMedia(mangbaihetthuvienplaylist.get(positionPlayer).getTenBaiHat(), mangbaihetthuvienplaylist.get(positionPlayer).getTenCaSi());
-       // }
-
+        else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
+            startMusic(mangbaihetthuvienplaylist.get(positionPlayer).getLinkBaiHat());
+            urlImage = mangbaihetthuvienplaylist.get(positionPlayer).getHinhBaiHat();
+        }
     }
+
     private PendingIntent getPendingIntent(Context context, int action){
         Intent intent = new Intent(this, BroadcastReceiverAction.class);
         intent.putExtra("action_music", action);
         return  PendingIntent.getBroadcast(context.getApplicationContext(), action, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
     private void sendActonToPlayNhacActivity(int action){
-        if (mangbaihat != null){
-//                mangbaihetthuvienplaylist != null){
+        if (mangbaihat != null || mangbaihetthuvienplaylist !=null){
             Intent intent = new Intent("send_data_to_activity");
             intent.putExtra("status_player", isPlaying);
             intent.putExtra("action_music", action);
@@ -247,9 +247,6 @@ public class ForegroundServiceControl extends Service {
                         if (mangbaihat != null && mangbaihat.size() > 0){
                             nextMusic(mangbaihat.size());
                         }
-//                        else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
-//                            nextMusic(mangbaihetthuvienplaylist.size());
-//                        }
                         CompleteAndStart();
                         try {
                             Thread.sleep(1000);

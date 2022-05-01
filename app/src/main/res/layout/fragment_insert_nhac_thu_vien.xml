@@ -12,20 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:gravity="center_horizontal"
-        app:titleTextColor="#FFF"
-        app:title="Nghệ sĩ, bài hát, hoặc podcast"
-        app:titleMarginStart="60dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:collapseIcon="?attr/actionModeCloseDrawable" />
+        app:collapseIcon="?attr/actionModeCloseDrawable"
+        app:title="Nghệ sĩ, bài hát"
+        app:titleTextColor="#FFF" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerviewtimkiemthuvien"
         android:background="@drawable/bgr_insertthuvien"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toilbartimkiemthuvien"
-        android:layout_marginTop="20dp" />
+        android:layout_below="@+id/toilbartimkiemthuvien" />
 
     <TextView
         android:visibility="gone"
@@ -36,14 +34,5 @@
         android:id="@+id/textviewtimkiemnullthuvien"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/back"
-        android:elevation="6dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </RelativeLayout>

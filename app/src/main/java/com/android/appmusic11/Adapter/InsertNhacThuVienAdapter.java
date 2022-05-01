@@ -1,6 +1,7 @@
 package com.android.appmusic11.Adapter;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.android.appmusic11.Activity.TrangChuActivity;
 import com.android.appmusic11.Model.BaiHatModel;
+import com.android.appmusic11.Model.BaiHatThuVienPlayListModel;
+import com.android.appmusic11.Model.NgheSiModel;
 import com.android.appmusic11.R;
 import com.squareup.picasso.Picasso;
 
@@ -25,6 +29,7 @@ public class InsertNhacThuVienAdapter extends RecyclerView.Adapter<InsertNhacThu
 
     Context context;
     ArrayList<BaiHatModel> mangbaihat;
+    ArrayList<BaiHatThuVienPlayListModel> arrayBaiHatThuVienPlayList;
     int idthuvien;
 
     public InsertNhacThuVienAdapter(Context context, ArrayList<BaiHatModel> mangbaihat, int idthuvien) {
@@ -50,58 +55,39 @@ public class InsertNhacThuVienAdapter extends RecyclerView.Adapter<InsertNhacThu
         holder.imginsertnhac.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                InsertDataBaiHatThuVien(idthuvien, baiHat.getMaBaiHat(), baiHat.getTenBaiHat(),baiHat.getTenCaSi(),
-//                        baiHat.getHinhBaiHat(), baiHat.getLinkBaiHat());
-//                UpdateHinhThuVien(idthuvien, mangbaihat.get(position).getHinhBaiHat());
+                InsertDataBaiHatThuVien(idthuvien, baiHat.getMaBaiHat(), baiHat.getTenBaiHat(),baiHat.getTenCaSi(),
+                        baiHat.getHinhBaiHat(), baiHat.getLinkBaiHat());
+                UpdateHinhThuVien(idthuvien, mangbaihat.get(position).getHinhBaiHat());
             }
         });
 
     }
-//    public void InsertDataBaiHatThuVien(int idtv, int idbh, String tbh, String tcs, String hbh, String lbh) {
-//        Dataservice dataservice = APIService.getService();
-//        Call<ResponseModel> callback = dataservice.insertnhacthuvien(idtv, idbh, tbh, tcs, hbh, lbh);
-//        callback.enqueue(new Callback<ResponseModel>() {
-//            @Override
-//            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
-//                ResponseModel responseBody = response.body();
-//                if (responseBody != null) {
-//                    if (responseBody.getSuccess().equals("1")) {
-//                        Toast.makeText(context, "Đã thêm", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(context, "Thêm thất bại", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseModel> call, Throwable t) {
-//            }
-//
-//        });
-//    }
-//
-//    public void UpdateHinhThuVien(int idtv, String hbh) {
-//        Dataservice dataservice = APIService.getService();
-//        Call<ResponseModel> callback = dataservice.updatehinhthuvien(idtv, hbh);
-//        callback.enqueue(new Callback<ResponseModel>() {
-//            @Override
-//            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
-//                ResponseModel responseBody = response.body();
-//                if (responseBody != null) {
-//                    if (responseBody.getSuccess().equals("1")) {
-//                        Log.d("updatehinhthuven", "suscess");
-//                    } else {
-//                        Log.d("updatehinhthuven", "erro");
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseModel> call, Throwable t) {
-//            }
-//
-//        });
-//    }
+    public void InsertDataBaiHatThuVien(int idtv, int idbh, String tbh, String tcs, String hbh, String lbh) {
+        arrayBaiHatThuVienPlayList = new ArrayList<>();
+        Cursor dataBaiHatThuVien= TrangChuActivity.databaseHelper.getData("SELECT * FROM BaiHatThuVienPlayList WHERE TenBaiHat='"+tbh+"'");
+        arrayBaiHatThuVienPlayList.clear();
+        while (dataBaiHatThuVien.moveToNext()) {
+             int MaBaiHatThuVien = dataBaiHatThuVien.getInt(0);
+             int MaThuVien = dataBaiHatThuVien.getInt(1);
+             int MaBaiHat = dataBaiHatThuVien.getInt(2);
+             String TenBaiHat = dataBaiHatThuVien.getString(3);
+             String HinhBaiHat = dataBaiHatThuVien.getString(4);
+             String TenCaSi = dataBaiHatThuVien.getString(5);
+             String LinkBaiHat = dataBaiHatThuVien.getString(6);
+             arrayBaiHatThuVienPlayList.add(new BaiHatThuVienPlayListModel(MaBaiHatThuVien,MaThuVien,MaBaiHat,TenBaiHat,HinhBaiHat,TenCaSi,LinkBaiHat));
+        }
+        if(arrayBaiHatThuVienPlayList.size() > 0){
+            Toast.makeText(context,"Bài hát đã được thêm vào",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            TrangChuActivity.databaseHelper.QueryData("INSERT INTO BaiHatThuVienPlayList VALUES (null,'" + idtv + "','" + idbh + "','" + tbh + "','" + hbh + "','" + tcs + "','" + lbh + "')");
+            Toast.makeText(context, "Đã thêm bài hát thành công", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void UpdateHinhThuVien(int idtv, String hbh) {
+        TrangChuActivity.databaseHelper.QueryData("UPDATE ThuVienPlayList SET HinhThuVienPlayList='"+hbh+"' WHERE MaThuVienPlayList = '"+idtv+"'");
+//        Toast.makeText(context,"Update hình thành công",Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public int getItemCount() {

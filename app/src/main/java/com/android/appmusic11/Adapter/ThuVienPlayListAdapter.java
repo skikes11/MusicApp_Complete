@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.appmusic11.Activity.DanhSachBaiHatActivity;
+import com.android.appmusic11.Activity.TrangChuActivity;
 import com.android.appmusic11.Model.ThuVienPlayListModel;
 import com.android.appmusic11.R;
 import com.squareup.picasso.Picasso;
@@ -43,7 +45,7 @@ public class ThuVienPlayListAdapter extends RecyclerView.Adapter<ThuVienPlayList
         ThuVienPlayListModel thuVienPlayList = arrayThuVienPlayList.get(position);
         holder.txttenthuvienplaylist.setText(thuVienPlayList.getTenThuVienPlayList());
         holder.txttennguoidung.setText("Danh sách phát nhạc của bạn ");
-        Picasso.get().load(thuVienPlayList.getHinhThuVienPlayList()).into(holder.imgthuvienplaylist);
+       Picasso.get().load(thuVienPlayList.getHinhThuVienPlayList()).into(holder.imgthuvienplaylist);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,8 +70,7 @@ public class ThuVienPlayListAdapter extends RecyclerView.Adapter<ThuVienPlayList
                 pos.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        deletethuvien(thuVienPlayList.getIDThuVienPlayList());
-//                        deletenhieubaihatthuvien(thuVienPlayList.getIDThuVienPlayList());
+                        deletethuvien(thuVienPlayList.getMaThuVienPlayList());
                         alertDialog.dismiss();
                     }
                 });
@@ -100,5 +101,9 @@ public class ThuVienPlayListAdapter extends RecyclerView.Adapter<ThuVienPlayList
             txttennguoidung = view.findViewById(R.id.txtusetname);
         }
 
+    }
+    private void deletethuvien(int idthuvien) {
+        TrangChuActivity.databaseHelper.QueryData("DELETE FROM ThuVienPlayList WHERE MaThuVienPlayList = '"+idthuvien+"'");
+        Toast.makeText(context,"Xoá thành công thư viện",Toast.LENGTH_SHORT).show();
     }
 }

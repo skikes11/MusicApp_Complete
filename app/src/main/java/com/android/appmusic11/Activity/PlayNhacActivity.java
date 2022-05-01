@@ -34,6 +34,7 @@ import android.widget.TextView;
 import com.android.appmusic11.Adapter.ViewPagerDiaNhac;
 import com.android.appmusic11.Fragment.Fragment_dia_nhac;
 import com.android.appmusic11.Model.BaiHatModel;
+import com.android.appmusic11.Model.BaiHatThuVienPlayListModel;
 import com.android.appmusic11.R;
 import com.android.appmusic11.Service_Local.ForegroundServiceControl;
 import com.squareup.picasso.Picasso;
@@ -57,7 +58,7 @@ public class PlayNhacActivity extends AppCompatActivity {
     private int dem = 0, position = 0, duration = 0, timeValue = 0, durationToService = 0;
     private boolean repeat = false, checkrandom = false, isplaying;
     private static ArrayList<BaiHatModel> mangbaihat = new ArrayList<>();
-//    private static ArrayList<BaiHatThuVienPlayListModel> mangbaihetthuvienplaylist = new ArrayList<>();
+    private static ArrayList<BaiHatThuVienPlayListModel> mangbaihetthuvienplaylist = new ArrayList<>();
     private Fragment_dia_nhac fragment_dia_nhac;
     public static ViewPagerDiaNhac adapternhac;
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -98,9 +99,9 @@ public class PlayNhacActivity extends AppCompatActivity {
             intent.putExtra("obj_song_baihat", mangbaihat);
             Log.d("ManhCuong","Start:"+mangbaihat);
         }
-//        else if (mangbaihetthuvienplaylist.size() > 0){
-//            intent.putExtra("obj_song_thuvien", mangbaihetthuvienplaylist);
-//        }
+        else if (mangbaihetthuvienplaylist.size() > 0){
+            intent.putExtra("obj_song_thuvien", mangbaihetthuvienplaylist);
+        }
         startService(intent);
     }
     private void enventClick() {
@@ -147,7 +148,7 @@ public class PlayNhacActivity extends AppCompatActivity {
         imageButtonpreviewnhac.setOnClickListener(view -> sendActionToService(ForegroundServiceControl.ACTION_PREVIOUS));
         toolbarplaynhac.setNavigationOnClickListener(view -> {
             mangbaihat.clear();
-//            mangbaihetthuvienplaylist.clear();
+          mangbaihetthuvienplaylist.clear();
             finish();
         });
     }
@@ -161,11 +162,11 @@ public class PlayNhacActivity extends AppCompatActivity {
                     setView(mangbaihat.get(position).getMaBaiHat(),
                             mangbaihat.get(position).getHinhBaiHat(), mangbaihat.get(position).getTenBaiHat(), mangbaihat.get(position).getTenCaSi());
                 }
-//                else if (mangbaihetthuvienplaylist.size() > 0){
-//                    setView(taikhoan, mangbaihetthuvienplaylist.get(position).getIdBaiHat(),
-//                            mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat()
-//                            , mangbaihetthuvienplaylist.get(position).getTenCaSi());
-//                }
+                else if (mangbaihetthuvienplaylist.size() > 0){
+                    setView(mangbaihetthuvienplaylist.get(position).getMaBaiHat(),
+                            mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat()
+                            , mangbaihetthuvienplaylist.get(position).getTenCaSi());
+                }
                 else {
                     handler.postDelayed(this, 300);
                 }
@@ -182,12 +183,12 @@ public class PlayNhacActivity extends AppCompatActivity {
             setView(mangbaihat.get(position).getMaBaiHat(),
                     mangbaihat.get(position).getHinhBaiHat(), mangbaihat.get(position).getTenBaiHat(), mangbaihat.get(position).getTenCaSi());
         }
-//        else if (mangbaihetthuvienplaylist.size() > 0){
-//            NextMusic();
-//            setView(taikhoan, mangbaihetthuvienplaylist.get(position).getIdBaiHat(),
-//                    mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat()
-//                    , mangbaihetthuvienplaylist.get(position).getTenCaSi());
-//        }
+        else if (mangbaihetthuvienplaylist.size() > 0){
+            NextMusic();
+            setView(mangbaihetthuvienplaylist.get(position).getMaBaiHat(),
+                    mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat()
+                    , mangbaihetthuvienplaylist.get(position).getTenCaSi());
+        }
     }
     private void PreviousMusic(){
         imageButtonplaypausenhac.setImageResource(R.drawable.nutplay);
@@ -199,34 +200,32 @@ public class PlayNhacActivity extends AppCompatActivity {
             setView(mangbaihat.get(position).getMaBaiHat(),
                     mangbaihat.get(position).getHinhBaiHat(), mangbaihat.get(position).getTenBaiHat(), mangbaihat.get(position).getTenCaSi());
         }
-//        else if (mangbaihetthuvienplaylist.size() > 0){
-//            PreviousMusic();
-//            setView(taikhoan, mangbaihetthuvienplaylist.get(position).getIdBaiHat(),
-//                    mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat(),
-//                    mangbaihetthuvienplaylist.get(position).getTenCaSi());
-//        }
+        else if (mangbaihetthuvienplaylist.size() > 0){
+            PreviousMusic();
+            setView( mangbaihetthuvienplaylist.get(position).getMaBaiHat(),
+                    mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat(),
+                    mangbaihetthuvienplaylist.get(position).getTenCaSi());
+        }
     }
     private void GetDataFromIntent() {
         Intent intent = getIntent();
         mangbaihat.clear();
-//        mangbaihetthuvienplaylist.clear();
-//        mangbaihatyeuthich.clear();
+        mangbaihetthuvienplaylist.clear();
         if (intent != null){
             if (intent.hasExtra("cakhuc")){
                 BaiHatModel baiHat = intent.getParcelableExtra("cakhuc");
                 mangbaihat.add(baiHat);
-                Log.d("ManhCuong","MangBaiHat:"+mangbaihat.get(0).getLinkBaiHat());
             }
             else if (intent.hasExtra("cacbaihat")){
                 mangbaihat = intent.getParcelableArrayListExtra("cacbaihat");
             }
-//            else if (intent.hasExtra("cakhucthuvien")){
-//                BaiHatThuVienPlayListModel baiHatThuVienPlayList = intent.getParcelableExtra("cakhucthuvien");
-//                mangbaihetthuvienplaylist.add(baiHatThuVienPlayList);
-//            }
-//            else if (intent.hasExtra("cacbaihatthuvien")){
-//                mangbaihetthuvienplaylist = intent.getParcelableArrayListExtra("cacbaihatthuvien");
-            //}
+            else if (intent.hasExtra("cakhucthuvien")){
+                BaiHatThuVienPlayListModel baiHatThuVienPlayList = intent.getParcelableExtra("cakhucthuvien");
+                mangbaihetthuvienplaylist.add(baiHatThuVienPlayList);
+            }
+            else if (intent.hasExtra("cacbaihatthuvien")){
+                mangbaihetthuvienplaylist = intent.getParcelableArrayListExtra("cacbaihatthuvien");
+            }
         }
     }
     private void AnhXa() {

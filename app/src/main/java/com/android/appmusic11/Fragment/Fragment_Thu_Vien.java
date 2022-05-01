@@ -2,6 +2,7 @@ package com.android.appmusic11.Fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 
+import com.android.appmusic11.Activity.DanhSachBaiHatActivity;
 import com.android.appmusic11.Activity.TrangChuActivity;
 import com.android.appmusic11.Adapter.ViewPagerThuVien;
 import com.android.appmusic11.Model.ThuVienPlayListModel;
@@ -38,6 +40,7 @@ public class Fragment_Thu_Vien extends Fragment implements Dialog_insert_thu_vie
     View view;
     private String tenThuVien;
     private TrangChuActivity hm;
+    ArrayList<ThuVienPlayListModel> mangthuvienplaylist;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,81 +67,49 @@ public class Fragment_Thu_Vien extends Fragment implements Dialog_insert_thu_vie
         tabLayout = view.findViewById(R.id.tabLayouttv);
         viewPager = view.findViewById(R.id.viewPagertv);
         imgAddThuVien = view.findViewById(R.id.idaddthuvien);
-        imguser = view.findViewById(R.id.imageviewuserthuvien);
     }
     private void openDialog() {
-//        Dialog_insert_thu_vien_playlist exampleDialog = new Dialog_insert_thu_vien_playlist();
-//        exampleDialog.show(getFragmentManager(), "Dialog_insert_thu_vien_playlist");
-//        exampleDialog.setTargetFragment(Fragment_Thu_Vien.this, 1);
+        Dialog_insert_thu_vien_playlist exampleDialog = new Dialog_insert_thu_vien_playlist();
+        exampleDialog.show(getFragmentManager(), "Dialog_insert_thu_vien_playlist");
+        exampleDialog.setTargetFragment(Fragment_Thu_Vien.this, 1);
     }
 
     @Override
     public void apply(String tenthuvien) {
+        tenThuVien = tenthuvien;
+        insertthuvien(tenthuvien);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                GetData();
+            }
+        }, 3000);
+    }
+    private void insertthuvien(String tenThuVien) {
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Please wait");
+        progressDialog.setMessage("Creating...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        TrangChuActivity.databaseHelper.QueryData("INSERT INTO ThuVienPlayList VALUES (null,'"+tenThuVien+"','https://i.pinimg.com/736x/d8/33/4a/d8334a0a51e14e5c40cc5829d0030f1d.jpg')");
 
     }
-
-
-//    public void apply(String tenthuvien) {
-//        HashMap<String, String> params = new HashMap<>();
-//        tenThuVien = tenthuvien;
-//        params.put("tenthuvien", tenThuVien);
-//        params.put("UserName", hm.getTaikhoan());
-//        insertthuvien(params);
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                GetData();
-//            }
-//        }, 3000);
-//    }
-//    private void insertthuvien(HashMap<String, String> params) {
-//
-//        progressDialog = new ProgressDialog(getActivity());
-//        progressDialog.setTitle("Please wait");
-//        progressDialog.setMessage("Creating...");
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
-//
-//        Dataservice networkService = APIService.getService();
-//        Call<PhanHoiDangKyModel> registerCall = networkService.insertthuvien(params);
-//        registerCall.enqueue(new Callback<PhanHoiDangKyModel>() {
-//            @Override
-//            public void onResponse(@NonNull Call<PhanHoiDangKyModel> call, @NonNull Response<PhanHoiDangKyModel> response) {
-//                PhanHoiDangKyModel responseBody = response.body();
-//                if (responseBody != null) {
-//                    if (responseBody.getSuccess().equals("1")) {
-//                        Toast.makeText(getActivity(), "Tạo thành công !", Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<PhanHoiDangKyModel> call, @NonNull Throwable t) {
-//            }
-//        });
-//    }
-//    private void GetData() {
-//        hm = (HomeActivity) getActivity();
-//        Dataservice dataservice = APIService.getService();
-//        Call<List<ThuVienPlayListModel>> callback = dataservice.GetBangThuVienPlayList(hm.getTaikhoan());
-//        callback.enqueue(new Callback<List<ThuVienPlayListModel>>() {
-//            @Override
-//            public void onResponse(Call<List<ThuVienPlayListModel>> call, Response<List<ThuVienPlayListModel>> response) {
-//                ArrayList<ThuVienPlayListModel> mangthuvienplaylist = (ArrayList<ThuVienPlayListModel>) response.body();
-//                ThuVienPlayListModel thuVienPlayList = mangthuvienplaylist.get(mangthuvienplaylist.size()-1);
-//
-//                progressDialog.dismiss();
-//                Intent intent = new Intent(getActivity(), DanhsachbaihatActivity.class);
-//                intent.putExtra("idthuvienplaylist", thuVienPlayList);
-//                startActivity(intent);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<ThuVienPlayListModel>> call, Throwable t) {
-//
-//            }
-//
-//        });
-//    }
-
-}
+    private void GetData() {
+        mangthuvienplaylist = new ArrayList<>();
+        mangthuvienplaylist.clear();
+        Cursor dataThuVienPlayList = TrangChuActivity.databaseHelper.getData("SELECT * FROM ThuVienPlayList ");
+        while (dataThuVienPlayList.moveToNext()) {
+            int MaThuVienPlayList = dataThuVienPlayList.getInt(0);
+            String TenThuVienPlayList = dataThuVienPlayList.getString(1);
+            String HinhThuVienPlayList = dataThuVienPlayList.getString(2);
+            mangthuvienplaylist.add(new ThuVienPlayListModel(MaThuVienPlayList, TenThuVienPlayList,HinhThuVienPlayList));
+        }
+                ThuVienPlayListModel thuVienPlayList = mangthuvienplaylist.get(mangthuvienplaylist.size()-1);
+                progressDialog.dismiss();
+                Intent intent = new Intent(getActivity(), DanhSachBaiHatActivity.class);
+                intent.putExtra("idthuvienplaylist", thuVienPlayList);
+                startActivity(intent);
+            }
+    }

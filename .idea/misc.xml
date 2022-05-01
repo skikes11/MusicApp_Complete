@@ -18,6 +18,7 @@
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/activity_danhsachbaihat.xml" value="0.25052083333333336" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/activity_home.xml" value="0.25052083333333336" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/activity_insert_nhac_thu_vien.xml" value="0.25052083333333336" />
+        <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/activity_insert_thu_vien_play_list.xml" value="0.25416666666666665" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/activity_main.xml" value="0.25052083333333336" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/activity_play_nhac.xml" value="0.1" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/activity_trang_chu.xml" value="0.11041666666666666" />
@@ -41,12 +42,13 @@
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_bangxephang.xml" value="0.12454710144927536" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_chude.xml" value="0.12454710144927536" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_dianhac.xml" value="0.25416666666666665" />
-        <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_insert_nhac_thu_vien.xml" value="0.25052083333333336" />
+        <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_insert_nhac_thu_vien.xml" value="0.176" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_nghesi.xml" value="0.2296195652173913" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_phobien.xml" value="0.12454710144927536" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_playlist.xml" value="0.11499493414387031" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_profile.xml" value="0.25052083333333336" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_thinhhanh.xml" value="0.2296195652173913" />
+        <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_thoat.xml" value="0.1" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_thu_vien.xml" value="0.25052083333333336" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_thuvien_nghesi.xml" value="0.25052083333333336" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/layout/fragment_thuvien_playlist.xml" value="0.25052083333333336" />

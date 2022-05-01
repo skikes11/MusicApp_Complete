@@ -3,18 +3,24 @@ package com.android.appmusic11.Adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.appmusic11.Activity.PlayNhacActivity;
+import com.android.appmusic11.Activity.TrangChuActivity;
 import com.android.appmusic11.Model.BaiHatModel;
+import com.android.appmusic11.Model.BaiHatThuVienPlayListModel;
+import com.android.appmusic11.Model.NgheSiModel;
 import com.android.appmusic11.R;
 
 import com.squareup.picasso.Picasso;
@@ -26,10 +32,10 @@ import java.util.ArrayList;
 public class dsbhthuvienplaylistAdapter extends RecyclerView.Adapter<dsbhthuvienplaylistAdapter.ViewHolder>{
 
     Context context;
-    ArrayList<BaiHatModel> mangbaihatthuvienplaylist;
+    ArrayList<BaiHatThuVienPlayListModel> mangbaihatthuvienplaylist;
     View view;
 
-    public dsbhthuvienplaylistAdapter(Context context, ArrayList<BaiHatModel> mangbaihatthuvienplaylist) {
+    public dsbhthuvienplaylistAdapter(Context context, ArrayList<BaiHatThuVienPlayListModel> mangbaihatthuvienplaylist) {
         this.context = context;
         this.mangbaihatthuvienplaylist = mangbaihatthuvienplaylist;
     }
@@ -44,7 +50,7 @@ public class dsbhthuvienplaylistAdapter extends RecyclerView.Adapter<dsbhthuvien
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        BaiHatModel baiHatThuVienPlayList = mangbaihatthuvienplaylist.get(position);
+        BaiHatThuVienPlayListModel baiHatThuVienPlayList = mangbaihatthuvienplaylist.get(position);
         holder.txttenbaihat.setText(baiHatThuVienPlayList.getTenBaiHat());
         holder.txttencasi.setText(baiHatThuVienPlayList.getTenCaSi());
         Picasso.get(/*context*/).load(baiHatThuVienPlayList.getHinhBaiHat()).into(holder.hinhbaihat);
@@ -64,13 +70,13 @@ public class dsbhthuvienplaylistAdapter extends RecyclerView.Adapter<dsbhthuvien
                 pos.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        deletemotbaihatthuvien(baiHatThuVienPlayList.getMaBaiHatThuVienPlayList());
+                       deletemotbaihatthuvien(baiHatThuVienPlayList.getMaBaiHatThuVienPlayList());
                         mangbaihatthuvienplaylist.remove(position);
                         if (mangbaihatthuvienplaylist.size() <= 0){
-//                            UpdateHinhThuVien(baiHatThuVienPlayList.getMaThuVienPlayList(), "https://music4b.000webhostapp.com/icon_thuvien.jpg");
+                            UpdateHinhThuVien(baiHatThuVienPlayList.getMaThuVienPlayList(), "https://i.pinimg.com/736x/d8/33/4a/d8334a0a51e14e5c40cc5829d0030f1d.jpg");
                         }else {
                             if (position == mangbaihatthuvienplaylist.size()){
-//                                UpdateHinhThuVien(baiHatThuVienPlayList.getMaThuVienPlayList(), mangbaihatthuvienplaylist.get(mangbaihatthuvienplaylist.size()-1).getHinhBaiHat());
+                                UpdateHinhThuVien(baiHatThuVienPlayList.getMaThuVienPlayList(), mangbaihatthuvienplaylist.get(mangbaihatthuvienplaylist.size()-1).getHinhBaiHat());
                             }
                         }
                         alertDialog.dismiss();
@@ -87,52 +93,15 @@ public class dsbhthuvienplaylistAdapter extends RecyclerView.Adapter<dsbhthuvien
         });
     }
 
-//    private void deletemotbaihatthuvien(int idbaihatthuvien) {
-//
-//        Dataservice networkService = APIService.getService();
-//        Call<ResponseModel> login = networkService.deletemotbaihatthuvien(idbaihatthuvien);
-//        login.enqueue(new Callback<ResponseModel>() {
-//            @Override
-//            public void onResponse(@NonNull Call<ResponseModel> call, @NonNull Response<ResponseModel> response) {
-//                ResponseModel responseBody = response.body();
-//                if (responseBody != null) {
-//                    if (responseBody.getSuccess().equals("1")) {
-//                        Toast.makeText(context, "Đã xóa", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(context, "Bài hát này đã được xóa", Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<ResponseModel> call, @NonNull Throwable t) {
-//
-//            }
-//        });
-//    }
+    private void deletemotbaihatthuvien(int idbaihatthuvien) {
+        TrangChuActivity.databaseHelper.QueryData("DELETE FROM BaiHatThuVienPlayList WHERE MaBaiHatThuVienPlayList = '"+idbaihatthuvien+"' ");
+        Toast.makeText(context,"Đã xoá thành công",Toast.LENGTH_SHORT).show();
+    }
 
-//    public void UpdateHinhThuVien(int idtv, String hbh) {
-//        Dataservice dataservice = APIService.getService();
-//        Call<ResponseModel> callback = dataservice.updatehinhthuvien(idtv, hbh);
-//        callback.enqueue(new Callback<ResponseModel>() {
-//            @Override
-//            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
-//                ResponseModel responseBody = response.body();
-//                if (responseBody != null) {
-//                    if (responseBody.getSuccess().equals("1")) {
-//                        Log.d("updatehinhthuven", "suscess");
-//                    } else {
-//                        Log.d("updatehinhthuven", "erro");
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseModel> call, Throwable t) {
-//            }
-//
-//        });
-//    }
+    public void UpdateHinhThuVien(int idtv, String hbh) {
+        TrangChuActivity.databaseHelper.QueryData("UPDATE BaiHatThuVienPlayList SET HinhBaiHat = '"+hbh+"' Where MaThuVienPlayList = '"+idtv+"'");
+         Toast.makeText(context,"Update hình thành công",Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public int getItemCount() {
@@ -153,9 +122,8 @@ public class dsbhthuvienplaylistAdapter extends RecyclerView.Adapter<dsbhthuvien
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, PlayNhacActivity.class);
-//                    intent.putExtra("cakhucthuvien", mangbaihatthuvienplaylist.get(getAdapterPosition()));
+                   intent.putExtra("cakhucthuvien", mangbaihatthuvienplaylist.get(getBindingAdapterPosition()));
                     context.startActivity(intent);
-
                 }
             });
         }

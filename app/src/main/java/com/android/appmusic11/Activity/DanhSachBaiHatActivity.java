@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.android.appmusic11.Adapter.DanhSachBaiHatAdapter;
 import com.android.appmusic11.Adapter.dsbhthuvienplaylistAdapter;
 import com.android.appmusic11.Model.BaiHatModel;
+import com.android.appmusic11.Model.BaiHatThuVienPlayListModel;
 import com.android.appmusic11.Model.BangXepHangModel;
 import com.android.appmusic11.Model.ChuDeModel;
 import com.android.appmusic11.Model.NgheSiModel;
@@ -46,6 +47,7 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
     ArrayList<BaiHatModel> mangbaihat;
     DanhSachBaiHatAdapter danhsachbaihatAdapter;
     dsbhthuvienplaylistAdapter dsbhthuvienplaylistadapter;
+    ArrayList<BaiHatThuVienPlayListModel> mangbaihatthuvienplaylist;
     ImageView btnThemnhac;
     SwipeRefreshLayout swipeRefreshLayout;
     private int id;
@@ -90,7 +92,7 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
         }
         if (thuVienPlayList != null && !thuVienPlayList.equals("")){
             setValueInView(thuVienPlayList.getHinhThuVienPlayList());
-//            GetDataThuVienPlayList(String.valueOf(thuVienPlayList.getMaThuVienPlayList()));
+           GetDataThuVienPlayList(String.valueOf(thuVienPlayList.getMaThuVienPlayList()));
             txtcollapsing.setText(thuVienPlayList.getTenThuVienPlayList());
             getSupportActionBar().setTitle(thuVienPlayList.getTenThuVienPlayList());
         }
@@ -114,8 +116,8 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
             public void onRefresh() {
                 Intent intent = getIntent();
                 if(intent.hasExtra("idthuvienplaylist")){
-//                    GetDataThuVienPlayList(String.valueOf(thuVienPlayList.getMaThuVienPlayList()));
-//                    dsbhthuvienplaylistadapter.notifyDataSetChanged();
+                    GetDataThuVienPlayList(String.valueOf(thuVienPlayList.getMaThuVienPlayList()));
+                    dsbhthuvienplaylistadapter.notifyDataSetChanged();
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -211,24 +213,25 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
                 recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
                 dataBaiHat.close();
             }
-//    private void GetDataThuVienPlayList(String id) {
-//        Dataservice dataservice = APIService.getService();
-//        Call<List<BaiHatThuVienPlayListModel>> callback = dataservice.GetDanhsachbaihatthuvienplaylist(id);
-//        callback.enqueue(new Callback<List<BaiHatThuVienPlayListModel>>() {
-//            @Override
-//            public void onResponse(Call<List<BaiHatThuVienPlayListModel>> call, Response<List<BaiHatThuVienPlayListModel>> response) {
-//                mangbaihatthuvienplaylist = (ArrayList<BaiHatThuVienPlayListModel>) response.body();
-//                dsbhthuvienplaylistadapter = new dsbhthuvienplaylistAdapter(DanhsachbaihatActivity.this, mangbaihatthuvienplaylist);
-//                recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhsachbaihatActivity.this));
-//                recyclerViewdanhsachbaihat.setAdapter(dsbhthuvienplaylistadapter);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<BaiHatThuVienPlayListModel>> call, Throwable t) {
-//
-//            }
-//        });
-//    }
+    private void GetDataThuVienPlayList(String id) {
+      mangbaihatthuvienplaylist = new ArrayList<>();
+       mangbaihatthuvienplaylist.clear();
+       Cursor dataBaiHatThuVien = TrangChuActivity.databaseHelper.getData("SELECT MaBaiHatThuVienPlayList, MaThuVienPlayList, MaBaiHat, TenBaiHat, HinhBaiHat, TenCaSi, LinkBaiHat FROM BaiHatThuVienPlayList WHERE MaThuVienPlayList = '"+id+"' ");
+        while (dataBaiHatThuVien.moveToNext()) {
+            int MaBaiHatThuVienPlayList = dataBaiHatThuVien.getInt(0);
+            int MaThuVienPlayList = dataBaiHatThuVien.getInt(1);
+            int MaBaiHat = dataBaiHatThuVien.getInt(2);
+            String TenBaiHat = dataBaiHatThuVien.getString(3);
+            String HinhBaiHat = dataBaiHatThuVien.getString(4);
+            String TenNgheSi = dataBaiHatThuVien.getString(5);
+            String LinkBaiHat = dataBaiHatThuVien.getString(6);
+            mangbaihatthuvienplaylist.add(new BaiHatThuVienPlayListModel(MaBaiHatThuVienPlayList,MaThuVienPlayList,MaBaiHat,TenBaiHat,HinhBaiHat,TenNgheSi,LinkBaiHat));
+        }
+                dsbhthuvienplaylistadapter = new dsbhthuvienplaylistAdapter(DanhSachBaiHatActivity.this, mangbaihatthuvienplaylist);
+                recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhSachBaiHatActivity.this));
+                recyclerViewdanhsachbaihat.setAdapter(dsbhthuvienplaylistadapter);
+
+            }
 
     private void AnhXa() {
         toolbar = findViewById(R.id.toolbardanhsachbaihat);
@@ -290,16 +293,16 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
                         Toast.makeText(DanhSachBaiHatActivity.this, "Danh sách không có bài hát nào cả :(", Toast.LENGTH_SHORT).show();
                     }
                 }
-//                else{
-//                    if (mangbaihatthuvienplaylist != null){
-//                        if (mangbaihatthuvienplaylist.size() > 0){
-//                            intent.putExtra("cacbaihatthuvien", mangbaihatthuvienplaylist);
-//                            startActivity(intent);
-//                        }else {
-//                            Toast.makeText(DanhSachBaiHatActivity.this, "Danh sách không có bài hát nào cả :(", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                }
+                else{
+                    if (mangbaihatthuvienplaylist != null){
+                        if (mangbaihatthuvienplaylist.size() > 0){
+                            intent.putExtra("cacbaihatthuvien", mangbaihatthuvienplaylist);
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(DanhSachBaiHatActivity.this, "Danh sách không có bài hát nào cả :(", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
             }
         });
     }
