@@ -73,7 +73,7 @@ public class dsbhthuvienplaylistAdapter extends RecyclerView.Adapter<dsbhthuvien
                        deletemotbaihatthuvien(baiHatThuVienPlayList.getMaBaiHatThuVienPlayList());
                         mangbaihatthuvienplaylist.remove(position);
                         if (mangbaihatthuvienplaylist.size() <= 0){
-                            UpdateHinhThuVien(baiHatThuVienPlayList.getMaThuVienPlayList(), "https://i.pinimg.com/736x/d8/33/4a/d8334a0a51e14e5c40cc5829d0030f1d.jpg");
+                            UpdateHinhThuVien(baiHatThuVienPlayList.getMaThuVienPlayList(), "https://kenh14cdn.com/thumb_w/660/203336854389633024/2021/12/8/d04735780ac715fd325abffee4627f11-16389696872851695463984.jpg");
                         }else {
                             if (position == mangbaihatthuvienplaylist.size()){
                                 UpdateHinhThuVien(baiHatThuVienPlayList.getMaThuVienPlayList(), mangbaihatthuvienplaylist.get(mangbaihatthuvienplaylist.size()-1).getHinhBaiHat());

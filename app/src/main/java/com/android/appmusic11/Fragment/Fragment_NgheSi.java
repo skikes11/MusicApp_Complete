@@ -58,4 +58,5 @@ public class Fragment_NgheSi extends Fragment {
                 recyclerViewNgheSi.setAdapter(ngheSiAdapter);
                 dataNgheSi.close();
     }
+
 }

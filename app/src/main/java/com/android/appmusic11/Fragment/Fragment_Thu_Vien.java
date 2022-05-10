@@ -93,7 +93,7 @@ public class Fragment_Thu_Vien extends Fragment implements Dialog_insert_thu_vie
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        TrangChuActivity.databaseHelper.QueryData("INSERT INTO ThuVienPlayList VALUES (null,'"+tenThuVien+"','https://i.pinimg.com/736x/d8/33/4a/d8334a0a51e14e5c40cc5829d0030f1d.jpg')");
+        TrangChuActivity.databaseHelper.QueryData("INSERT INTO ThuVienPlayList VALUES (null,'"+tenThuVien+"','https://kenh14cdn.com/thumb_w/660/203336854389633024/2021/12/8/d04735780ac715fd325abffee4627f11-16389696872851695463984.jpg')");
 
     }
     private void GetData() {
