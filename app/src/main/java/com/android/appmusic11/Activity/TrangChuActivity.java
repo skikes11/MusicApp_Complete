@@ -32,7 +32,7 @@ public class TrangChuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trang_chu);
-   databaseHelper = new DatabaseHelper(this,"0000000001.sqlite",null,1);
+   databaseHelper = new DatabaseHelper(this,"MyMusic.sqlite",null,1);
    try {
        databaseHelper.QueryData("CREATE TABLE IF NOT EXISTS BangXepHang(MaBangXepHang VARCHAR(200) PRIMARY KEY, TenBangXepHang NVARCHAR(200) ,HinhBangXepHang VARCHAR(200))");
        databaseHelper.QueryData("INSERT INTO BangXepHang VALUES('BXH1','Top 50 -  VIETNam','https://charts-images.scdn.co/assets/locale_en/regional/daily/region_vn_large.jpg')");
