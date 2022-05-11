@@ -48,7 +48,7 @@ public class InsertNhacThuVienAdapter extends RecyclerView.Adapter<InsertNhacThu
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        BaiHatModel baiHat = mangbaihat.get(position);
+        BaiHatModel baiHat = mangbaihat.get(holder.getBindingAdapterPosition());
         holder.tenbaihat.setText(baiHat.getTenBaiHat());
         holder.temcasi.setText(baiHat.getTenCaSi());
         Picasso.get(/*context*/).load(baiHat.getHinhBaiHat()).into(holder.imgtimkiem);
@@ -58,13 +58,14 @@ public class InsertNhacThuVienAdapter extends RecyclerView.Adapter<InsertNhacThu
                 InsertDataBaiHatThuVien(idthuvien, baiHat.getMaBaiHat(), baiHat.getTenBaiHat(),baiHat.getTenCaSi(),
                         baiHat.getHinhBaiHat(), baiHat.getLinkBaiHat());
                 UpdateHinhThuVien(idthuvien, mangbaihat.get(position).getHinhBaiHat());
+                Log.d("ManhCuong","Ten Bai Hat:"+baiHat.getTenBaiHat());
             }
         });
 
     }
     public void InsertDataBaiHatThuVien(int idtv, int idbh, String tbh, String tcs, String hbh, String lbh) {
         arrayBaiHatThuVienPlayList = new ArrayList<>();
-        Cursor dataBaiHatThuVien= TrangChuActivity.databaseHelper.getData("SELECT * FROM BaiHatThuVienPlayList WHERE TenBaiHat='"+tbh+"'");
+        Cursor dataBaiHatThuVien= TrangChuActivity.databaseHelper.getData("SELECT * FROM BaiHatThuVienPlayList WHERE TenBaiHat='"+tbh+"' AND MaThuVienPlayList='"+idtv+"'");
         arrayBaiHatThuVienPlayList.clear();
         while (dataBaiHatThuVien.moveToNext()) {
              int MaBaiHatThuVien = dataBaiHatThuVien.getInt(0);
@@ -76,6 +77,7 @@ public class InsertNhacThuVienAdapter extends RecyclerView.Adapter<InsertNhacThu
              String LinkBaiHat = dataBaiHatThuVien.getString(6);
              arrayBaiHatThuVienPlayList.add(new BaiHatThuVienPlayListModel(MaBaiHatThuVien,MaThuVien,MaBaiHat,TenBaiHat,HinhBaiHat,TenCaSi,LinkBaiHat));
         }
+        Log.d("ManhCuong","arrayThuVien:"+arrayBaiHatThuVienPlayList.size());
         if(arrayBaiHatThuVienPlayList.size() > 0){
             Toast.makeText(context,"Bài hát đã được thêm vào",Toast.LENGTH_SHORT).show();
         }

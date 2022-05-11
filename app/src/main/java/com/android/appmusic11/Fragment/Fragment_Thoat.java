@@ -27,7 +27,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class Fragment_Thoat extends Fragment {
     Button btn;
     View view;
-    PlayNhacActivity playlist;
 
 
     @Nullable
@@ -38,10 +37,15 @@ public class Fragment_Thoat extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-                homeIntent.addCategory(Intent.CATEGORY_HOME);
-                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(homeIntent);
+                Intent intent = new Intent(getActivity(),MainActivity.class);
+                startActivity(intent);
+
+                Intent startMain = new Intent(Intent.ACTION_MAIN);
+                startMain.addCategory(Intent.CATEGORY_HOME);
+                startMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(startMain);
+                getActivity().finish();
+                System.exit(0);
             }
         });
         return  view;

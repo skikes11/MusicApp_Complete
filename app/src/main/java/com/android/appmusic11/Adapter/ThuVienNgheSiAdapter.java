@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.android.appmusic11.Activity.DanhSachBaiHatActivity;
 import com.android.appmusic11.Model.NgheSiModel;
 import com.android.appmusic11.R;
@@ -17,43 +18,44 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ThuVienNgheSiAdapter extends RecyclerView.Adapter<ThuVienNgheSiAdapter.ViewHolder> {
+public class ThuVienNgheSiAdapter extends RecyclerView.Adapter<ThuVienNgheSiAdapter.ViewHolder>{
+
     Context context;
-    ArrayList<NgheSiModel> arrayNgheSi;
+    ArrayList<NgheSiModel> mangnghesi;
     View view;
 
-    public ThuVienNgheSiAdapter(Context context, ArrayList<NgheSiModel> arrayNgheSi) {
+    public ThuVienNgheSiAdapter(Context context, ArrayList<NgheSiModel> mangnghesi) {
         this.context = context;
-        this.arrayNgheSi = arrayNgheSi;
+        this.mangnghesi = mangnghesi;
     }
-
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate(R.layout.dong_thuvien_nghesi,parent, false);
-        return new ThuVienNgheSiAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        NgheSiModel ngheSi = arrayNgheSi.get(position);
+    public void onBindViewHolder(@NonNull ViewHolder holder,final int position) {
+        NgheSiModel ngheSi = mangnghesi.get(position);
         holder.txttennghesi.setText(ngheSi.getTenNgheSi());
         Picasso.get(/*context*/).load(ngheSi.getHinhNgheSi()).into(holder.imgnghesi);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DanhSachBaiHatActivity.class);
-                intent.putExtra("intentnghesi", arrayNgheSi.get(position));
+                intent.putExtra("intentnghesi", mangnghesi.get(holder.getBindingAdapterPosition()));
                 context.startActivity(intent);
             }
         });
     }
 
+
     @Override
     public int getItemCount() {
-         return arrayNgheSi.size();
+        return mangnghesi.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -65,4 +67,5 @@ public class ThuVienNgheSiAdapter extends RecyclerView.Adapter<ThuVienNgheSiAdap
             txttennghesi = itemView.findViewById(R.id.textviewthuviennghesi);
         }
     }
+
 }

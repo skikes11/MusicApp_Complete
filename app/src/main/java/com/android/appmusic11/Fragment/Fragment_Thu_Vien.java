@@ -58,6 +58,8 @@ public class Fragment_Thu_Vien extends Fragment implements Dialog_insert_thu_vie
     private void init() {
         ViewPagerThuVien viewPagerThuVien = new ViewPagerThuVien(getChildFragmentManager());
         viewPagerThuVien.addFragment(new com.android.appmusic11.Fragment.Fragment_ThuVien_Playlist(), "Playlist");
+        viewPagerThuVien.addFragment(new Fragment_ThuVien_NgheSi(), "Nghệ sĩ");
+        viewPagerThuVien.addFragment(new Fragment_ThuVien_YeuThich(), "Yêu thích");
         viewPager.setAdapter(viewPagerThuVien);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -93,7 +95,7 @@ public class Fragment_Thu_Vien extends Fragment implements Dialog_insert_thu_vie
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        TrangChuActivity.databaseHelper.QueryData("INSERT INTO ThuVienPlayList VALUES (null,'"+tenThuVien+"','https://kenh14cdn.com/thumb_w/660/203336854389633024/2021/12/8/d04735780ac715fd325abffee4627f11-16389696872851695463984.jpg')");
+        TrangChuActivity.databaseHelper.QueryData("INSERT INTO ThuVienPlayList VALUES (null,'"+tenThuVien+"','https://png.pngtree.com/png-vector/20190329/ourlarge/pngtree-vector-music-note-icon-png-image_889465.jpg')");
 
     }
     private void GetData() {

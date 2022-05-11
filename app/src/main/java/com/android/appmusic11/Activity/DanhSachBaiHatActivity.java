@@ -227,6 +227,7 @@ public class DanhSachBaiHatActivity extends AppCompatActivity {
             String LinkBaiHat = dataBaiHatThuVien.getString(6);
             mangbaihatthuvienplaylist.add(new BaiHatThuVienPlayListModel(MaBaiHatThuVienPlayList,MaThuVienPlayList,MaBaiHat,TenBaiHat,HinhBaiHat,TenNgheSi,LinkBaiHat));
         }
+        Log.d("ManhCuong","arrayThuVienLoad"+mangbaihatthuvienplaylist.size());
                 dsbhthuvienplaylistadapter = new dsbhthuvienplaylistAdapter(DanhSachBaiHatActivity.this, mangbaihatthuvienplaylist);
                 recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(DanhSachBaiHatActivity.this));
                 recyclerViewdanhsachbaihat.setAdapter(dsbhthuvienplaylistadapter);

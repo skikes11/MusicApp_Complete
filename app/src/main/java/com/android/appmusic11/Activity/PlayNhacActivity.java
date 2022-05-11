@@ -30,11 +30,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.appmusic11.Adapter.ViewPagerDiaNhac;
 import com.android.appmusic11.Fragment.Fragment_dia_nhac;
 import com.android.appmusic11.Model.BaiHatModel;
 import com.android.appmusic11.Model.BaiHatThuVienPlayListModel;
+import com.android.appmusic11.Model.BaiHatYeuThichModel;
 import com.android.appmusic11.R;
 import com.android.appmusic11.Service_Local.ForegroundServiceControl;
 import com.squareup.picasso.Picasso;
@@ -60,6 +62,7 @@ public class PlayNhacActivity extends AppCompatActivity {
     private static ArrayList<BaiHatModel> mangbaihat = new ArrayList<>();
     private static ArrayList<BaiHatThuVienPlayListModel> mangbaihetthuvienplaylist = new ArrayList<>();
     private Fragment_dia_nhac fragment_dia_nhac;
+    private static final ArrayList<BaiHatYeuThichModel> mangbaihatyeuthich = new ArrayList<>();
     public static ViewPagerDiaNhac adapternhac;
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -102,9 +105,40 @@ public class PlayNhacActivity extends AppCompatActivity {
         else if (mangbaihetthuvienplaylist.size() > 0){
             intent.putExtra("obj_song_thuvien", mangbaihetthuvienplaylist);
         }
+        else if (mangbaihatyeuthich.size() > 0){
+            intent.putExtra("obj_song_yeuthich", mangbaihatyeuthich);
+        }
         startService(intent);
     }
     private void enventClick() {
+        imageViewtim.setOnClickListener(view -> {
+            if (dem == 0){
+                Animation animation = AnimationUtils.loadAnimation(PlayNhacActivity.this, R.anim.anim_timclick);
+                imageViewtim.setImageResource(R.drawable.iconloved);
+                view.startAnimation(animation);
+                if (mangbaihat.size() > 0){
+                    insertYeuThich( mangbaihat.get(position).getMaBaiHat(), mangbaihat.get(position).getTenBaiHat(),
+                            mangbaihat.get(position).getTenCaSi(), mangbaihat.get(position).getHinhBaiHat(), mangbaihat.get(position).getLinkBaiHat());
+                }else if (mangbaihetthuvienplaylist.size() > 0){
+                    insertYeuThich( mangbaihetthuvienplaylist.get(position).getMaBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat(),
+                            mangbaihetthuvienplaylist.get(position).getTenCaSi(), mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getLinkBaiHat());
+                }else if (mangbaihatyeuthich.size() > 0){
+                    insertYeuThich( mangbaihatyeuthich.get(position).getMaBaiHat(), mangbaihatyeuthich.get(position).getTenBaiHat(),
+                            mangbaihatyeuthich.get(position).getTenCaSi(), mangbaihatyeuthich.get(position).getHinhBaiHat(), mangbaihatyeuthich.get(position).getLinkBaiNhac());
+                }
+                dem++;
+            }else {
+                imageViewtim.setImageResource(R.drawable.iconlove);
+                if (mangbaihat.size() > 0){
+                    deleteYeuThich( mangbaihat.get(position).getMaBaiHat());
+                }else if (mangbaihetthuvienplaylist.size() > 0){
+                    deleteYeuThich( mangbaihetthuvienplaylist.get(position).getMaBaiHat());
+                }else if (mangbaihatyeuthich.size() > 0){
+                    deleteYeuThich( mangbaihatyeuthich.get(position).getMaBaiHat());
+                }
+                dem--;
+            }
+        });
         imageButtonplaypausenhac.setOnClickListener(view -> {
             if (isplaying){
                 sendActionToService(ForegroundServiceControl.ACTION_PAUSE);
@@ -149,6 +183,7 @@ public class PlayNhacActivity extends AppCompatActivity {
         toolbarplaynhac.setNavigationOnClickListener(view -> {
             mangbaihat.clear();
           mangbaihetthuvienplaylist.clear();
+            mangbaihatyeuthich.clear();
             finish();
         });
     }
@@ -166,6 +201,10 @@ public class PlayNhacActivity extends AppCompatActivity {
                     setView(mangbaihetthuvienplaylist.get(position).getMaBaiHat(),
                             mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat()
                             , mangbaihetthuvienplaylist.get(position).getTenCaSi());
+                }
+                else if (mangbaihatyeuthich.size() > 0){
+                    setView(mangbaihatyeuthich.get(position).getMaBaiHat(),
+                            mangbaihatyeuthich.get(position).getHinhBaiHat(), mangbaihatyeuthich.get(position).getTenBaiHat(), mangbaihatyeuthich.get(position).getTenCaSi());
                 }
                 else {
                     handler.postDelayed(this, 300);
@@ -189,6 +228,11 @@ public class PlayNhacActivity extends AppCompatActivity {
                     mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat()
                     , mangbaihetthuvienplaylist.get(position).getTenCaSi());
         }
+        else if (mangbaihatyeuthich.size() > 0){
+            NextMusic();
+            setView( mangbaihatyeuthich.get(position).getMaBaiHat(),
+                    mangbaihatyeuthich.get(position).getHinhBaiHat(), mangbaihatyeuthich.get(position).getTenBaiHat(), mangbaihatyeuthich.get(position).getTenCaSi());
+        }
     }
     private void PreviousMusic(){
         imageButtonplaypausenhac.setImageResource(R.drawable.nutplay);
@@ -205,6 +249,11 @@ public class PlayNhacActivity extends AppCompatActivity {
             setView( mangbaihetthuvienplaylist.get(position).getMaBaiHat(),
                     mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat(),
                     mangbaihetthuvienplaylist.get(position).getTenCaSi());
+        }
+        else if (mangbaihatyeuthich.size() > 0){
+            PreviousMusic();
+            setView(mangbaihatyeuthich.get(position).getMaBaiHat(),
+                    mangbaihatyeuthich.get(position).getHinhBaiHat(), mangbaihatyeuthich.get(position).getTenBaiHat(), mangbaihatyeuthich.get(position).getTenCaSi());
         }
     }
     private void GetDataFromIntent() {
@@ -225,6 +274,10 @@ public class PlayNhacActivity extends AppCompatActivity {
             }
             else if (intent.hasExtra("cacbaihatthuvien")){
                 mangbaihetthuvienplaylist = intent.getParcelableArrayListExtra("cacbaihatthuvien");
+            }
+            else if (intent.hasExtra(("cakhucyeuthich"))){
+                BaiHatYeuThichModel baiHatYeuThichModel = intent.getParcelableExtra("cakhucyeuthich");
+                mangbaihatyeuthich.add(baiHatYeuThichModel);
             }
         }
     }
@@ -286,6 +339,7 @@ public class PlayNhacActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle(tenBaiHat);
         textViewcasi.setText(tenCaSi);
         textViewtennhac.setText(tenBaiHat);
+        checkYeuThich(idBaiHat);
     }
     private void setGradient(String urlImage){
         Picasso.get().load(urlImage)
@@ -314,6 +368,7 @@ public class PlayNhacActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+//      ForegroundServiceControl.mediaPlayer.stop();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
     }
     private void onClick(View view) {
@@ -332,4 +387,32 @@ public class PlayNhacActivity extends AppCompatActivity {
         }
         sendActionToService(ForegroundServiceControl.ACTION_REPEAT);
     }
-}
+    private void insertYeuThich(int idbh, String tbh, String tcs, String hbh, String lbh) {
+            TrangChuActivity.databaseHelper.QueryData("INSERT INTO BaiHatYeuThich VALUES (null,'" + idbh + "','" + tbh + "','" + hbh + "','" + tcs + "','" + lbh + "')");
+            Toast.makeText(PlayNhacActivity.this, "Thêm bài hát vào yêu thích thành công", Toast.LENGTH_SHORT).show();
+    }
+    private void deleteYeuThich(int idbh) {
+        TrangChuActivity.databaseHelper.QueryData("DELETE FROM BaiHatYeuThich WHERE MaBaiHat = '"+idbh+"'");
+        Toast.makeText(PlayNhacActivity.this,"Xoá bài hát yêu thích thành công",Toast.LENGTH_SHORT).show();
+    }
+    private void checkYeuThich(int idbh) {
+        mangbaihatyeuthich.clear();
+        Cursor cursor = TrangChuActivity.databaseHelper.getData("SELECT * FROM BaiHatYeuThich Where MaBaiHat = '"+idbh+"'");
+        while (cursor.moveToNext()){
+            int MaBaiHatYeuThich = cursor.getInt(0);
+            int MaBaiHat = cursor.getInt(1);
+            String TenBaiHat = cursor.getString(1);
+            String HinhBaiHat = cursor.getString(2);
+            String TenCaSi = cursor.getString(3);
+            String LinkBaiHat = cursor.getString(4);
+            mangbaihatyeuthich.add(new BaiHatYeuThichModel(MaBaiHatYeuThich,MaBaiHat,TenBaiHat,HinhBaiHat,TenCaSi,LinkBaiHat));
+        }
+                   if(mangbaihatyeuthich.size()>0){
+                        dem = 1;
+                        imageViewtim.setImageResource(R.drawable.iconloved);
+                    } else {
+                        dem = 0;
+                        imageViewtim.setImageResource(R.drawable.iconlove);
+                    }
+                }
+    }

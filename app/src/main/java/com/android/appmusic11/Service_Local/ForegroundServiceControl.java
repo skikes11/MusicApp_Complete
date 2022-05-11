@@ -18,10 +18,12 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import static com.android.appmusic11.Service_Local.ChannelNotification.CHANNEL_ID;
 
 
 import com.android.appmusic11.Model.BaiHatModel;
 import com.android.appmusic11.Model.BaiHatThuVienPlayListModel;
+import com.android.appmusic11.Model.BaiHatYeuThichModel;
 import com.android.appmusic11.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -38,38 +40,46 @@ public class ForegroundServiceControl extends Service {
     public static final int ACTION_DURATION = 5;
     public static final int ACTION_REPEAT = 6;
     public static final int ACTION_RANDOM = 7;
-    private MediaPlayer mediaPlayer;
+    public static MediaPlayer mediaPlayer;
     private boolean isPlaying, isRepeat, isRandom;
     private String urlImage;
     private ArrayList<BaiHatThuVienPlayListModel> mangbaihetthuvienplaylist = new ArrayList<>();
     private ArrayList<BaiHatModel> mangbaihat = new ArrayList<>();
+    private ArrayList<BaiHatYeuThichModel> mangbaihatyeuthich = new ArrayList<>();
     private int positionPlayer = 0, duration = 0, seekToTime = 0, curentime = 0;
+
     @Override
     public void onCreate() {
         super.onCreate();
     }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-            if (intent != null){
-                if (intent.hasExtra("obj_song_baihat")){
-                    clearArray();
-                    mangbaihat = intent.getParcelableArrayListExtra("obj_song_baihat");
-                }
-                else if (intent.hasExtra("obj_song_thuvien")){
-                    clearArray();
-                    mangbaihetthuvienplaylist = intent.getParcelableArrayListExtra("obj_song_thuvien");
-                    Log.d("ManhCuong","Bài hát thư viện"+mangbaihetthuvienplaylist.size());
-                }
+        if (intent != null) {
+            if (intent.hasExtra("obj_song_baihat")) {
+                clearArray();
+                mangbaihat = intent.getParcelableArrayListExtra("obj_song_baihat");
+            } else if (intent.hasExtra("obj_song_thuvien")) {
+                clearArray();
+                mangbaihetthuvienplaylist = intent.getParcelableArrayListExtra("obj_song_thuvien");
+                Log.d("ManhCuong", "Bài hát thư viện" + mangbaihetthuvienplaylist.size());
+            } else if (intent.hasExtra("obj_song_yeuthich")) {
+                clearArray();
+                mangbaihatyeuthich = intent.getParcelableArrayListExtra("obj_song_yeuthich");
+                Log.d("ManhCuong", "Bài hát yêu thích" + mangbaihatyeuthich.size());
+
             }
+        }
         assert intent != null;
-        if (!intent.hasExtra("action_music_service")){
-                CompleteAndStart();
-            }
+        if (!intent.hasExtra("action_music_service")) {
+            CompleteAndStart();
+        }
         int actionMusic = intent.getIntExtra("action_music_service", 0);
         seekToTime = intent.getIntExtra("duration", 0);
         isRepeat = intent.getBooleanExtra("repeat_music", false);
@@ -77,46 +87,51 @@ public class ForegroundServiceControl extends Service {
         handleActionMusic(actionMusic);
         return START_NOT_STICKY;
     }
+
     private void clearArray() {
         positionPlayer = 0;
         mangbaihat.clear();
         mangbaihetthuvienplaylist.clear();
-
+        mangbaihatyeuthich.clear();
     }
-    private void handleActionMusic(int action){
-        switch (action){
+
+    private void handleActionMusic(int action) {
+        switch (action) {
             case ACTION_PAUSE:
-                if (mangbaihat != null && mangbaihat.size() > 0){
+                if (mangbaihat != null && mangbaihat.size() > 0) {
                     pauseMusic(mangbaihat.get(positionPlayer).getTenBaiHat(), mangbaihat.get(positionPlayer).getTenCaSi());
-                }
-                else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
+                } else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0) {
                     pauseMusic(mangbaihetthuvienplaylist.get(positionPlayer).getTenBaiHat(), mangbaihetthuvienplaylist.get(positionPlayer).getTenCaSi());
+                } else if (mangbaihatyeuthich != null && mangbaihatyeuthich.size() > 0) {
+                    pauseMusic(mangbaihatyeuthich.get(positionPlayer).getTenBaiHat(), mangbaihatyeuthich.get(positionPlayer).getTenCaSi());
                 }
                 break;
             case ACTION_RESUME:
-                if (mangbaihat != null && mangbaihat.size() > 0){
+                if (mangbaihat != null && mangbaihat.size() > 0) {
                     resumeMusic(mangbaihat.get(positionPlayer).getTenBaiHat(), mangbaihat.get(positionPlayer).getTenCaSi());
-                }
-                else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
+                } else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0) {
                     resumeMusic(mangbaihetthuvienplaylist.get(positionPlayer).getTenBaiHat(), mangbaihetthuvienplaylist.get(positionPlayer).getTenCaSi());
+                } else if (mangbaihatyeuthich != null && mangbaihatyeuthich.size() > 0) {
+                    resumeMusic(mangbaihatyeuthich.get(positionPlayer).getTenBaiHat(), mangbaihatyeuthich.get(positionPlayer).getTenCaSi());
                 }
-
                 break;
             case ACTION_NEXT:
-                if (mangbaihat != null && mangbaihat.size() > 0){
+                if (mangbaihat != null && mangbaihat.size() > 0) {
                     nextMusic(mangbaihat.size());
-                }
-                else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
+                } else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0) {
                     nextMusic(mangbaihetthuvienplaylist.size());
+                } else if (mangbaihatyeuthich != null && mangbaihatyeuthich.size() > 0) {
+                    nextMusic(mangbaihatyeuthich.size());
                 }
                 CompleteAndStart();
                 break;
             case ACTION_PREVIOUS:
-                if (mangbaihat != null && mangbaihat.size() > 0){
+                if (mangbaihat != null && mangbaihat.size() > 0) {
                     previousMusic(mangbaihat.size());
-                }
-                else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
+                } else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0) {
                     previousMusic(mangbaihetthuvienplaylist.size());
+                } else if (mangbaihatyeuthich != null && mangbaihatyeuthich.size() > 0) {
+                    previousMusic(mangbaihatyeuthich.size());
                 }
                 CompleteAndStart();
                 break;
@@ -125,8 +140,9 @@ public class ForegroundServiceControl extends Service {
                 break;
         }
     }
+
     private void startMusic(String linkBaiHat) {
-        if (mediaPlayer != null){
+        if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
@@ -137,65 +153,79 @@ public class ForegroundServiceControl extends Service {
         sendActonToPlayNhacActivity(ACTION_RESUME);
         sendTimeCurrent();
     }
+
     private void resumeMusic(String tenBaiHat, String tenCaSi) {
-        if (mediaPlayer != null && !isPlaying){
+        if (mediaPlayer != null && !isPlaying) {
             mediaPlayer.start();
             isPlaying = true;
             sendActonToPlayNhacActivity(ACTION_RESUME);
+            sendNotificationMedia(tenBaiHat, tenCaSi);
         }
     }
+
     private void pauseMusic(String tenBaiHat, String tenCaSi) {
-        if (mediaPlayer != null && isPlaying){
+        if (mediaPlayer != null && isPlaying) {
             mediaPlayer.pause();
             isPlaying = false;
             sendActonToPlayNhacActivity(ACTION_PAUSE);
+            sendNotificationMedia(tenBaiHat, tenCaSi);
         }
     }
-    private void nextMusic(int sizeArray){
+
+    private void nextMusic(int sizeArray) {
         positionPlayer++;
-        if (isRepeat){
+        if (isRepeat) {
             positionPlayer -= 1;
-        }else if (isRandom){
+        } else if (isRandom) {
             Random random = new Random();
             positionPlayer = random.nextInt(sizeArray);
         }
-        if (positionPlayer >= sizeArray){
+        if (positionPlayer >= sizeArray) {
             positionPlayer = 0;
         }
         sendActonToPlayNhacActivity(ACTION_NEXT);
     }
-    private void previousMusic(int sizeArray){
+
+    private void previousMusic(int sizeArray) {
         positionPlayer--;
-        if (isRepeat){
+        if (isRepeat) {
             positionPlayer += 1;
-        }else if (isRandom){
+        } else if (isRandom) {
             Random random = new Random();
             positionPlayer = random.nextInt(sizeArray);
         }
-        if (positionPlayer < 0){
-            positionPlayer = sizeArray-1;
+        if (positionPlayer < 0) {
+            positionPlayer = sizeArray - 1;
         }
         sendActonToPlayNhacActivity(ACTION_PREVIOUS);
     }
-    private void CompleteAndStart(){
-        if (mangbaihat != null && mangbaihat.size() > 0){
-            Log.d("ManhCuong","PosittionPlayer"+mangbaihat.get(positionPlayer).getLinkBaiHat());
+
+    private void CompleteAndStart() {
+        if (mangbaihat != null && mangbaihat.size() > 0) {
+            Log.d("ManhCuong", "PosittionPlayer" + mangbaihat.get(positionPlayer).getLinkBaiHat());
             startMusic(mangbaihat.get(positionPlayer).getLinkBaiHat());
             urlImage = mangbaihat.get(positionPlayer).getHinhBaiHat();
-        }
-        else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
+            sendNotificationMedia(mangbaihat.get(positionPlayer).getTenBaiHat(), mangbaihat.get(positionPlayer).getTenCaSi());
+        } else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0) {
             startMusic(mangbaihetthuvienplaylist.get(positionPlayer).getLinkBaiHat());
             urlImage = mangbaihetthuvienplaylist.get(positionPlayer).getHinhBaiHat();
+            sendNotificationMedia(mangbaihetthuvienplaylist.get(positionPlayer).getTenBaiHat(), mangbaihetthuvienplaylist.get(positionPlayer).getTenCaSi());
+        } else if (mangbaihatyeuthich != null && mangbaihatyeuthich.size() > 0) {
+            Log.d("ManhCuong","Link bai hat:"+mangbaihatyeuthich.get(positionPlayer).getLinkBaiNhac());
+            startMusic(mangbaihatyeuthich.get(positionPlayer).getLinkBaiNhac());
+            urlImage = mangbaihatyeuthich.get(positionPlayer).getHinhBaiHat();
+            sendNotificationMedia(mangbaihatyeuthich.get(positionPlayer).getTenBaiHat(), mangbaihatyeuthich.get(positionPlayer).getTenCaSi());
         }
     }
 
-    private PendingIntent getPendingIntent(Context context, int action){
+    private PendingIntent getPendingIntent(Context context, int action) {
         Intent intent = new Intent(this, BroadcastReceiverAction.class);
         intent.putExtra("action_music", action);
-        return  PendingIntent.getBroadcast(context.getApplicationContext(), action, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(context.getApplicationContext(), action, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
-    private void sendActonToPlayNhacActivity(int action){
-        if (mangbaihat != null || mangbaihetthuvienplaylist !=null){
+
+    private void sendActonToPlayNhacActivity(int action) {
+        if (mangbaihat != null || mangbaihetthuvienplaylist != null) {
             Intent intent = new Intent("send_data_to_activity");
             intent.putExtra("status_player", isPlaying);
             intent.putExtra("action_music", action);
@@ -205,27 +235,30 @@ public class ForegroundServiceControl extends Service {
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
         }
     }
+
     @SuppressWarnings("deprecation")
-    private void sendTimeCurrent(){
-        if (mediaPlayer != null){
+    private void sendTimeCurrent() {
+        if (mediaPlayer != null) {
             curentime = mediaPlayer.getCurrentPosition();
             sendActonToPlayNhacActivity(ACTION_DURATION);
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (mediaPlayer != null){
+                    if (mediaPlayer != null) {
                         sendTimeCurrent();
                     }
                 }
             }, 1000);
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         mediaPlayer.stop();
     }
+
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
     class playMP3 extends AsyncTask<String, Void, String> {
@@ -244,8 +277,12 @@ public class ForegroundServiceControl extends Service {
                 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        if (mangbaihat != null && mangbaihat.size() > 0){
+                        if (mangbaihat != null && mangbaihat.size() > 0) {
                             nextMusic(mangbaihat.size());
+                        } else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0) {
+                            nextMusic(mangbaihetthuvienplaylist.size());
+                        } else if (mangbaihatyeuthich != null && mangbaihatyeuthich.size() > 0) {
+                            nextMusic(mangbaihatyeuthich.size());
                         }
                         CompleteAndStart();
                         try {
@@ -256,12 +293,48 @@ public class ForegroundServiceControl extends Service {
                     }
                 });
                 mediaPlayer.setDataSource(baihat);
-                  mediaPlayer.prepare();
+                mediaPlayer.prepare();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             mediaPlayer.start();
             duration = mediaPlayer.getDuration();
         }
+    }
+
+    public void sendNotificationMedia(String tenBaiHat, String tenCaSi) {
+        MediaSessionCompat mediaSessionCompat = new MediaSessionCompat(this, "tag");
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.iconlogo)
+                .setContentText("My Music")
+                .setContentTitle(tenBaiHat)
+                .setContentText(tenCaSi)
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                        .setShowActionsInCompactView(0, 1, 2)
+                        .setMediaSession(mediaSessionCompat.getSessionToken()))
+                .addAction(R.drawable.noti_iconpreview, "Previous", getPendingIntent(this, ACTION_PREVIOUS));
+        if (isPlaying) {
+            notificationBuilder.addAction(R.drawable.noti_nutplay, "Pause", getPendingIntent(this, ACTION_PAUSE));
+        } else {
+            notificationBuilder.addAction(R.drawable.noti_nutpause, "Pause", getPendingIntent(this, ACTION_RESUME));
+        }
+        notificationBuilder.addAction(R.drawable.noti_iconnext, "Next", getPendingIntent(this, ACTION_NEXT));
+        Picasso.get().load(urlImage)
+                .into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        notificationBuilder.setLargeIcon(bitmap);
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    }
+                });
+        Notification notification = notificationBuilder.build();
+        startForeground(1, notification);
     }
 }

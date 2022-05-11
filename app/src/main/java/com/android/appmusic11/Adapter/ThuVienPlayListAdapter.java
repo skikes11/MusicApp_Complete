@@ -22,7 +22,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ThuVienPlayListAdapter extends RecyclerView.Adapter<ThuVienPlayListAdapter.ViewHolder>{
+public class ThuVienPlayListAdapter extends RecyclerView.Adapter<ThuVienPlayListAdapter.ViewHolder> {
     Context context;
     ArrayList<ThuVienPlayListModel> arrayThuVienPlayList;
     View view;
@@ -36,7 +36,7 @@ public class ThuVienPlayListAdapter extends RecyclerView.Adapter<ThuVienPlayList
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        view = inflater.inflate(R.layout.dong_thuvien_playlist,parent, false);
+        view = inflater.inflate(R.layout.dong_thuvien_playlist, parent, false);
         return new ViewHolder(view);
     }
 
@@ -45,12 +45,12 @@ public class ThuVienPlayListAdapter extends RecyclerView.Adapter<ThuVienPlayList
         ThuVienPlayListModel thuVienPlayList = arrayThuVienPlayList.get(position);
         holder.txttenthuvienplaylist.setText(thuVienPlayList.getTenThuVienPlayList());
         holder.txttennguoidung.setText("Danh sách phát nhạc của bạn ");
-       Picasso.get().load(thuVienPlayList.getHinhThuVienPlayList()).into(holder.imgthuvienplaylist);
+        Picasso.get().load(thuVienPlayList.getHinhThuVienPlayList()).into(holder.imgthuvienplaylist);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DanhSachBaiHatActivity.class);
-                intent.putExtra("idthuvienplaylist", arrayThuVienPlayList.get(position));
+                intent.putExtra("idthuvienplaylist", arrayThuVienPlayList.get(holder.getBindingAdapterPosition()));
                 context.startActivity(intent);
             }
         });
@@ -60,7 +60,7 @@ public class ThuVienPlayListAdapter extends RecyclerView.Adapter<ThuVienPlayList
 
                 AlertDialog alertDialog = new AlertDialog.Builder(context)
                         .setTitle("Xóa thư viện")
-                        .setMessage("Bạn có muốn xóa thư viện "+thuVienPlayList.getTenThuVienPlayList()+" ?")
+                        .setMessage("Bạn có muốn xóa thư viện " + thuVienPlayList.getTenThuVienPlayList() + " ?")
                         .setPositiveButton("Xóa", null)
                         .setNegativeButton("Hủy", null)
                         .show();
@@ -71,6 +71,7 @@ public class ThuVienPlayListAdapter extends RecyclerView.Adapter<ThuVienPlayList
                     @Override
                     public void onClick(View v) {
                         deletethuvien(thuVienPlayList.getMaThuVienPlayList());
+                        deletenhieubaihatthuvien(thuVienPlayList.getMaThuVienPlayList());
                         alertDialog.dismiss();
                     }
                 });
@@ -94,6 +95,7 @@ public class ThuVienPlayListAdapter extends RecyclerView.Adapter<ThuVienPlayList
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgthuvienplaylist;
         TextView txttenthuvienplaylist, txttennguoidung;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imgthuvienplaylist = view.findViewById(R.id.imageviewthuvienplaylist);
@@ -102,8 +104,13 @@ public class ThuVienPlayListAdapter extends RecyclerView.Adapter<ThuVienPlayList
         }
 
     }
+
     private void deletethuvien(int idthuvien) {
-        TrangChuActivity.databaseHelper.QueryData("DELETE FROM ThuVienPlayList WHERE MaThuVienPlayList = '"+idthuvien+"'");
-        Toast.makeText(context,"Xoá thành công thư viện",Toast.LENGTH_SHORT).show();
+        TrangChuActivity.databaseHelper.QueryData("DELETE FROM ThuVienPlayList WHERE MaThuVienPlayList = '" + idthuvien + "'");
+        Toast.makeText(context, "Xoá thành công thư viện", Toast.LENGTH_SHORT).show();
+    }
+
+    private void deletenhieubaihatthuvien(int idthuvien) {
+        TrangChuActivity.databaseHelper.QueryData("DELETE FROM BaiHatThuVienPlayList WHERE MaThuVienPlayList = '" + idthuvien + "'");
     }
 }
