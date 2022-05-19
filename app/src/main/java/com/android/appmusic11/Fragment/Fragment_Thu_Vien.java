@@ -56,6 +56,8 @@ public class Fragment_Thu_Vien extends Fragment implements Dialog_insert_thu_vie
         return  view;
     }
     private void init() {
+
+
         ViewPagerThuVien viewPagerThuVien = new ViewPagerThuVien(getChildFragmentManager());
         viewPagerThuVien.addFragment(new com.android.appmusic11.Fragment.Fragment_ThuVien_Playlist(), "Playlist");
         viewPagerThuVien.addFragment(new Fragment_ThuVien_NgheSi(), "Nghệ sĩ");

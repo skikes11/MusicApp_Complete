@@ -263,7 +263,9 @@ public class PlayNhacActivity extends AppCompatActivity {
         if (intent != null){
             if (intent.hasExtra("cakhuc")){
                 BaiHatModel baiHat = intent.getParcelableExtra("cakhuc");
+                UpdateViewCount(baiHat.getMaBaiHat());
                 mangbaihat.add(baiHat);
+
             }
             else if (intent.hasExtra("cacbaihat")){
                 mangbaihat = intent.getParcelableArrayListExtra("cacbaihat");
@@ -309,6 +311,11 @@ public class PlayNhacActivity extends AppCompatActivity {
         textViewtatoltime.setText(simpleDateFormat.format(duration));
         seekBarnhac.setMax(duration);
     }
+
+    private void UpdateViewCount(int maBaiHat){
+        TrangChuActivity.databaseHelper.QueryData("UPDATE BaiHat set ViewCount = ViewCount +1 WHERE MaBaiHat = '"+maBaiHat+"'");
+    }
+
     private void handleMusic(int action){
         switch (action){
             case ForegroundServiceControl.ACTION_PAUSE:

@@ -17,6 +17,13 @@
             android:layout_height="wrap_content">
         </fragment>
         <fragment
+            android:name="com.android.appmusic11.Fragment.Fragment_Nhac_Thuong_Nghe"
+            android:id="@+id/fragmentnhacthuongnghe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </fragment>
+
+        <fragment
             android:name="com.android.appmusic11.Fragment.Fragment_NgheSi"
             android:id="@+id/fragmentnghesi"
             android:layout_width="match_parent"

@@ -3,6 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Flearning/Androi_workspace/AppMusic_Ver1/app/src/main/res/layout/activity_trang_chu.xml" value="0.11203703703703703" />
+        <entry key="..\:/Flearning/Androi_workspace/AppMusic_Ver1/app/src/main/res/layout/customdialog.xml" value="0.1" />
+        <entry key="..\:/Flearning/Androi_workspace/AppMusic_Ver1/app/src/main/res/layout/dong_baihat.xml" value="0.2140625" />
+        <entry key="..\:/Flearning/Androi_workspace/AppMusic_Ver1/app/src/main/res/layout/dong_nghesi.xml" value="0.10914855072463768" />
+        <entry key="..\:/Flearning/Androi_workspace/AppMusic_Ver1/app/src/main/res/layout/dong_playlist.xml" value="0.11203703703703703" />
+        <entry key="..\:/Flearning/Androi_workspace/AppMusic_Ver1/app/src/main/res/layout/dong_thinhhanh.xml" value="0.10410334346504559" />
+        <entry key="..\:/Flearning/Androi_workspace/AppMusic_Ver1/app/src/main/res/layout/fragment__nhac__thuong__nghe.xml" value="0.1" />
+        <entry key="..\:/Flearning/Androi_workspace/AppMusic_Ver1/app/src/main/res/layout/fragment_nghesi.xml" value="0.10914855072463768" />
+        <entry key="..\:/Flearning/Androi_workspace/AppMusic_Ver1/app/src/main/res/layout/fragment_playlist.xml" value="0.11203703703703703" />
+        <entry key="..\:/Flearning/Androi_workspace/AppMusic_Ver1/app/src/main/res/layout/fragment_thinhhanh.xml" value="0.10410334346504559" />
+        <entry key="..\:/Flearning/Androi_workspace/AppMusic_Ver1/app/src/main/res/layout/fragment_trang_chu.xml" value="0.1" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/drawable-v24/bg_img.xml" value="0.174" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/drawable-v24/bgr_maintab.xml" value="0.184" />
         <entry key="..\:/Workspace/Android/AppMusic11/app/src/main/res/drawable-v24/bgr_timkiem.xml" value="0.1" />
