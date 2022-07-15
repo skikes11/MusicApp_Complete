@@ -83,10 +83,10 @@ public class Fragment_Tim_Kiem extends Fragment {
         arrayBaiHat.clear();
            while (dataBaiHat.moveToNext()) {
                int MaBaiHat = dataBaiHat.getInt(0);
-               String TenBaiHat = dataBaiHat.getString(1);
-               String HinhBaiHat = dataBaiHat.getString(2);
-               String TenNgheSi = dataBaiHat.getString(3);
-               String LinkBaiHat = dataBaiHat.getString(4);
+               String TenBaiHat = dataBaiHat.getString(2);
+               String HinhBaiHat = dataBaiHat.getString(3);
+               String TenNgheSi = dataBaiHat.getString(4);
+               String LinkBaiHat = dataBaiHat.getString(5);
                arrayBaiHat.add(new BaiHatModel(MaBaiHat,TenBaiHat,HinhBaiHat,TenNgheSi,LinkBaiHat));
            }
                 if (arrayBaiHat.size() > 0){
